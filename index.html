@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0d0d14">
+  <title>SubTracker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg: #0d0d14;
+      --surface: #1a1a2e;
+      --surface2: #16213e;
+      --border: #2a2a4a;
+      --text: #e8e8f0;
+      --muted: #7a7a9a;
+      --green: #00e676;
+      --green-dim: rgba(0,230,118,0.12);
+      --amber: #ffab00;
+      --amber-dim: rgba(255,171,0,0.12);
+      --red: #ff5252;
+      --red-dim: rgba(255,82,82,0.12);
+      --purple: #7c4dff;
+      --purple-dim: rgba(124,77,255,0.12);
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+
+    #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+    .screen { display: none; flex-direction: column; height: 100dvh; overflow: hidden; }
+    .screen.active { display: flex; }
+
+    /* Header */
+    .hdr { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .hdr h1 { flex: 1; font-size: 18px; font-weight: 700; }
+    .hdr .sub { font-size: 13px; color: var(--muted); }
+    .back { background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; padding: 0 4px 0 0; line-height: 1; }
+
+    /* Scroll content */
+    .body { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+
+    /* Buttons */
+    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; border: none; border-radius: 14px; padding: 15px 20px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: transform 0.1s, opacity 0.1s; }
+    .btn:active { transform: scale(0.97); opacity: 0.85; }
+    .btn-green  { background: var(--green); color: #000; }
+    .btn-ghost  { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-red    { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,82,82,0.25); }
+    .btn-purple { background: var(--purple); color: #fff; }
+    .btn-amber  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,171,0,0.25); }
+    .btn-sm     { padding: 10px 18px; font-size: 14px; width: auto; border-radius: 10px; }
+    .btn-icon   { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--text); cursor: pointer; font-size: 18px; line-height: 1; }
+
+    /* Cards */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+
+    /* Form */
+    .label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
+    .input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; color: var(--text); font-size: 16px; }
+    .input:focus { outline: none; border-color: var(--green); }
+
+    .num-ctrl { display: flex; align-items: center; gap: 16px; }
+    .num-ctrl button { width: 46px; height: 46px; border-radius: 12px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num-ctrl .val { font-size: 24px; font-weight: 800; min-width: 44px; text-align: center; }
+
+    /* Stack */
+    .stack { display: flex; flex-direction: column; gap: 10px; }
+    .row   { display: flex; gap: 10px; }
+
+    /* Section title */
+    .sec { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 10px; }
+    .mt12 { margin-top: 12px; }
+    .mt16 { margin-top: 16px; }
+
+    /* Empty */
+    .empty { text-align: center; color: var(--muted); padding: 48px 0; }
+    .empty big { font-size: 48px; display: block; margin-bottom: 12px; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 22px; font-size: 14px; font-weight: 500; opacity: 0; transition: opacity 0.25s; z-index: 200; white-space: nowrap; pointer-events: none; }
+    .toast.on { opacity: 1; }
+
+    /* Modal sheet */
+    .sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: flex; flex-direction: column; }
+    .sheet { background: var(--surface); margin-top: auto; border-radius: 20px 20px 0 0; padding: 20px; max-height: 65vh; overflow-y: auto; }
+    .sheet-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .sheet-title strong { font-size: 17px; }
+    .sheet-close { background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+
+    /* ===== HOME ===== */
+    .hero { text-align: center; padding: 32px 0 28px; }
+    .hero big { font-size: 72px; display: block; }
+    .hero h2 { font-size: 30px; font-weight: 800; margin-top: 8px; }
+    .hero p { color: var(--muted); margin-top: 6px; font-size: 15px; }
+
+    /* ===== SQUAD ===== */
+    .player-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; color: var(--green); flex-shrink: 0; }
+    .player-name { flex: 1; font-size: 16px; font-weight: 500; }
+    .del { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+    .add-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .add-row .input { flex: 1; }
+    .add-row .btn { width: auto; padding: 13px 20px; }
+
+    /* ===== PRE-GAME ===== */
+    .steps { display: flex; gap: 6px; padding: 10px 16px; flex-shrink: 0; }
+    .step { height: 4px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+    .step.done { background: rgba(0,230,118,0.35); }
+    .step.active { background: var(--green); }
+
+    .att-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; cursor: pointer; transition: opacity 0.2s; }
+    .att-item.away { opacity: 0.38; }
+    .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .att-item:not(.away) .check { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+
+    .lu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .lu-card { padding: 14px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface2); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; }
+    .lu-card.field { background: var(--green-dim); border-color: var(--green); }
+    .lu-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+    .lu-card.field .lu-dot { background: var(--green); }
+    .lu-name { font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ===== GAME ===== */
+    .game-hdr { background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; padding: 10px 16px 8px; }
+    .game-top { display: flex; align-items: center; justify-content: space-between; }
+    .phase-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .clock { font-size: 40px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); line-height: 1; }
+    .game-meta { display: flex; gap: 18px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+    .game-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .game-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .zone { padding: 12px 12px 0; }
+    .zone-lbl { display: flex; align-items: center; gap: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+    .zone-badge { background: var(--surface); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: var(--text); }
+    .divider { height: 1px; background: var(--border); margin: 4px 12px 0; }
+
+    .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+    .pc { border-radius: 14px; padding: 11px 8px 10px; text-align: center; border: 2px solid var(--border); background: var(--surface2); cursor: pointer; transition: all 0.15s; position: relative; user-select: none; -webkit-user-select: none; }
+    .pc.field   { border-color: var(--green); background: var(--green-dim); }
+    .pc.warn    { border-color: var(--amber); background: var(--amber-dim); }
+    .pc.over    { border-color: var(--red);   background: var(--red-dim); }
+    .pc.bench   { border-color: var(--border); background: var(--surface); }
+    .pc.sel     { box-shadow: 0 0 0 3px var(--purple); border-color: var(--purple) !important; background: var(--purple-dim) !important; transform: scale(1.05); }
+
+    .pc-dot { width: 7px; height: 7px; border-radius: 50%; position: absolute; top: 8px; right: 8px; }
+    .pc.field .pc-dot { background: var(--green); }
+    .pc.warn  .pc-dot { background: var(--amber); }
+    .pc.over  .pc-dot { background: var(--red); }
+    .pc.bench .pc-dot { background: #444; }
+
+    .pc-name  { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+    .pc-time  { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 2px; }
+    .pc-total { font-size: 10px; color: var(--muted); }
+
+    .hint-bar { padding: 0 12px 8px; }
+    .hint { background: var(--purple-dim); border: 1px solid rgba(124,77,255,0.25); border-radius: 10px; padding: 9px 14px; font-size: 13px; color: var(--purple); text-align: center; }
+
+    .game-footer { display: flex; gap: 8px; padding: 10px 12px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+
+    /* ===== HALFTIME ===== */
+    .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
+    .ht-name { flex: 1; font-weight: 500; font-size: 15px; }
+    .ht-bar-bg { width: 70px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+    .ht-bar { height: 100%; border-radius: 3px; background: var(--green); }
+    .ht-mins { font-size: 22px; font-weight: 800; color: var(--green); min-width: 28px; text-align: right; }
+    .ht-unit { font-size: 11px; color: var(--muted); }
+
+    /* ===== POST-GAME ===== */
+    .pg-hero { text-align: center; padding: 24px 0 16px; }
+    .pg-hero big { font-size: 56px; display: block; }
+    .pg-hero h2 { font-size: 24px; font-weight: 800; margin-top: 8px; }
+    .pg-hero p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 8px; text-align: center; }
+    .stat-val { font-size: 28px; font-weight: 800; color: var(--green); }
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* Sub log items */
+    .log-item { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface2); border-radius: 10px; margin-bottom: 6px; font-size: 13px; }
+    .log-time { color: var(--green); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 38px; }
+    .log-half { color: var(--muted); font-size: 11px; }
+    .log-on  { color: var(--green); }
+    .log-off { color: var(--red); }
+    .log-dot { color: var(--muted); }
+
+    /* ===== HISTORY ===== */
+    .hist-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; cursor: pointer; }
+    .hist-icon { font-size: 28px; }
+    .hist-info { flex: 1; }
+    .hist-date { font-weight: 600; font-size: 15px; }
+    .hist-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .hist-arr { color: var(--muted); font-size: 20px; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div id="toast" class="toast"></div>
+
+  <!-- HOME -->
+  <div id="s-home" class="screen active">
+    <div class="body">
+      <div class="hero">
+        <big>⚽</big>
+        <h2>SubTracker</h2>
+        <p>Substitution manager for coaches</p>
+      </div>
+      <div class="stack" id="home-btns"></div>
+    </div>
+  </div>
+
+  <!-- SQUAD -->
+  <div id="s-squad" class="screen">
+    <div class="hdr">
+      <button class="back" onclick="App.go('home')">‹</button>
+      <h1>Squad</h1>
+      <span class="sub" id="squad-sub"></span>
+    </div>
+    <div class="body">
+      <div class="add-row">
+        <input id="new-player" class="input" type="text" placeholder="Player name" autocomplete="off"
+               onkeydown="if(event.key==='Enter')App.addPlayer()">
+        <button class="btn btn-green btn-sm" onclick="App.addPlayer()">Add</button>
+      </div>
+      <div id="squad-list"></div>
+    </div>
+  </div>
+
+  <!-- PRE-GAME -->
+  <div id="s-pregame" class="screen">
+    <div class="hdr">
+      <button class="back" id="pg-back">‹</button>
+      <h1 id="pg-title">Game Setup</h1>
+    </div>
+    <div class="steps" id="pg-steps"></div>
+    <div class="body" id="pg-body"></div>
+  </div>
+
+  <!-- GAME -->
+  <div id="s-game" class="screen">
+    <div class="game-hdr">
+      <div class="game-top">
+        <div>
+          <div class="phase-lbl" id="g-phase">1ST HALF</div>
+          <div class="clock" id="g-clock">00:00</div>
+        </div>
+        <button class="btn-icon" id="g-pause-btn" onclick="App.halfOrEnd()">⏸</button>
+      </div>
+      <div class="game-meta">
+        <span id="g-field-lbl">⚽ 7 on field</span>
+        <span id="g-sub-lbl">🔄 0 subs</span>
+        <span id="g-half-lbl">Half 1</span>
+      </div>
+    </div>
+    <div class="game-body" id="g-body"></div>
+    <div class="hint-bar" id="g-hint"></div>
+    <div class="game-footer" id="g-footer"></div>
+  </div>
+
+  <!-- HALFTIME -->
+  <div id="s-halftime" class="screen">
+    <div class="hdr"><h1>Half Time ⏸</h1></div>
+    <div class="body">
+      <div class="card" style="text-align:center;margin-bottom:16px">
+        <div class="sec" style="margin-bottom:4px">First Half</div>
+        <div style="font-size:36px;font-weight:800;color:var(--green)" id="ht-clock">20:00</div>
+      </div>
+      <div class="sec">Minutes Played</div>
+      <div id="ht-stats"></div>
+      <div class="mt16">
+        <button class="btn btn-green" onclick="App.resumeGame()">&#9654; Start 2nd Half</button>
+      </div>
+      <div class="sec mt16">Substitutions</div>
+      <div id="ht-log"></div>
+    </div>
+  </div>
+
+  <!-- POST-GAME -->
+  <div id="s-postgame" class="screen">
+    <div class="body">
+      <div class="pg-hero">
+        <big>🏆</big>
+        <h2>Full Time!</h2>
+        <p id="pg-date"></p>
+      </div>
+      <div class="stat-row" id="pg-stats"></div>
+      <div class="sec">Player Minutes</div>
+      <div id="pg-players"></div>
+      <div class="sec mt16">Substitutions</div>
+      <div id="pg-log"></div>
+      <div class="stack mt16">
+        <button class="btn btn-green"   onclick="App.saveGame()">Save Game</button>
+        <button class="btn btn-ghost"   onclick="App.go('home')">Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="s-history" class="screen">
+    <div class="hdr">
+      <button class="back" onclick="App.go('home')">‹</button>
+      <h1>History</h1>
+    </div>
+    <div class="body" id="hist-body"></div>
+  </div>
+
+</div>
+<script>
+const App = {
+
+  // ── State ──────────────────────────────────────────────────
+  S: {
+    squad: [],
+    defaults: { halfLen: 20, halves: 2, fieldN: 7, alertMin: 15 },
+    game: null,
+    history: [],
+    // transient
+    pg: null,        // pregame wizard data
+    pgStep: 0,
+    sel: null,       // selected player id for sub
+  },
+
+  timer: null,
+
+  // ── Persistence ────────────────────────────────────────────
+  save() {
+    localStorage.setItem('st2', JSON.stringify({
+      squad:    this.S.squad,
+      defaults: this.S.defaults,
+      history:  this.S.history,
+      game:     this.S.game,
+    }));
+  },
+
+  load() {
+    try {
+      const d = JSON.parse(localStorage.getItem('st2') || '{}');
+      if (d.squad)    this.S.squad    = d.squad;
+      if (d.defaults) this.S.defaults = { ...this.S.defaults, ...d.defaults };
+      if (d.history)  this.S.history  = d.history;
+      if (d.game)     this.S.game     = d.game;
+    } catch(e) {}
+  },
+
+  // ── Utils ──────────────────────────────────────────────────
+  uid()   { return Date.now().toString(36) + Math.random().toString(36).slice(2); },
+  fmt(s)  { const m=Math.floor(Math.abs(s)/60),sec=Math.floor(Math.abs(s)%60); return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; },
+  mins(s) { return Math.floor(s/60); },
+  esc(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
+  player(id) { return this.S.squad.find(p=>p.id===id); },
+
+  toast(msg, ms=2200) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('on');
+    clearTimeout(this._toastT);
+    this._toastT = setTimeout(()=>el.classList.remove('on'), ms);
+  },
+
+  modal(html) {
+    const bg = document.createElement('div');
+    bg.className = 'sheet-bg';
+    bg.innerHTML = `<div class="sheet">${html}</div>`;
+    bg.addEventListener('click', e => { if(e.target===bg) bg.remove(); });
+    document.body.appendChild(bg);
+    return bg;
+  },
+
+  confirm(msg, cb) {
+    const m = this.modal(`
+      <div class="sheet-title"><strong>Confirm</strong><button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">✕</button></div>
+      <p style="color:var(--muted);margin-bottom:20px;font-size:15px">${this.esc(msg)}</p>
+      <div class="row">
+        <button class="btn btn-ghost btn-sm" onclick="this.closest('.sheet-bg').remove()">Cancel</button>
+        <button class="btn btn-green btn-sm" id="conf-ok">Yes</button>
+      </div>
+    `);
+    m.querySelector('#conf-ok').onclick = () => { m.remove(); cb(); };
+  },
+
+  // ── Navigation ─────────────────────────────────────────────
+  go(screen) {
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s-'+screen).classList.add('active');
+    this.S.sel = null;
+    this['render_'+screen]();
+  },
+
+  // ── HOME ───────────────────────────────────────────────────
+  render_home() {
+    const g = this.S.game;
+    const hasActive = g && g.phase !== 'finished';
+    const btns = [];
+    if (hasActive) btns.push(`<button class="btn btn-green" onclick="App.resumeActive()">&#9654; Resume Game</button>`);
+    btns.push(`<button class="btn ${hasActive?'btn-ghost':'btn-green'}" onclick="App.startWizard()">&#9917; New Game</button>`);
+    btns.push(`<button class="btn btn-ghost" onclick="App.go('squad')">&#128101; Manage Squad (${this.S.squad.length})</button>`);
+    if (this.S.history.length) btns.push(`<button class="btn btn-ghost" onclick="App.go('history')">&#128203; History (${this.S.history.length} games)</button>`);
+    document.getElementById('home-btns').innerHTML = btns.join('');
+  },
+
+  resumeActive() {
+    const phase = this.S.game.phase;
+    if (phase === 'halftime') { this.go('halftime'); return; }
+    this.go('game');
+    this.startTimer();
+  },
+
+  // ── SQUAD ──────────────────────────────────────────────────
+  render_squad() {
+    document.getElementById('squad-sub').textContent = `${this.S.squad.length} players`;
+    const el = document.getElementById('squad-list');
+    if (!this.S.squad.length) {
+      el.innerHTML = `<div class="empty"><big>&#128101;</big>Add your squad above.</div>`;
+      return;
+    }
+    el.innerHTML = this.S.squad.map(p=>`
+      <div class="player-row">
+        <div class="avatar">${this.esc(p.name[0].toUpperCase())}</div>
+        <div class="player-name">${this.esc(p.name)}</div>
+        <button class="del" onclick="App.removePlayer('${p.id}')">&#10005;</button>
+      </div>
+    `).join('');
+  },
+
+  addPlayer() {
+    const inp = document.getElementById('new-player');
+    const name = inp.value.trim();
+    if (!name) return;
+    if (this.S.squad.find(p=>p.name.toLowerCase()===name.toLowerCase())) { this.toast('Already in squad'); return; }
+    this.S.squad.push({ id: this.uid(), name });
+    inp.value = '';
+    this.save();
+    this.render_squad();
+    inp.focus();
+  },
+
+  removePlayer(id) {
+    this.confirm('Remove this player from the squad?', ()=>{
+      this.S.squad = this.S.squad.filter(p=>p.id!==id);
+      this.save();
+      this.render_squad();
+    });
+  },
+
+  // ── PRE-GAME WIZARD ────────────────────────────────────────
+  startWizard() {
+    if (this.S.squad.length < 2) { this.toast('Add players to the squad first'); this.go('squad'); return; }
+    this.S.pg = { settings: {...this.S.defaults}, absent: [], lineup: [] };
+    this.S.pgStep = 0;
+    this.go('pregame');
+  },
+
+  render_pregame() {
+    const step = this.S.pgStep;
+    const titles = ['Game Settings', "Who's Playing?", 'Starting Lineup'];
+    document.getElementById('pg-title').textContent = titles[step];
+    document.getElementById('pg-steps').innerHTML = [0,1,2].map(i=>`<div class="step ${i<step?'done':i===step?'active':''}"></div>`).join('');
+    const back = document.getElementById('pg-back');
+    back.onclick = step === 0 ? ()=>App.go('home') : ()=>App.pgBack();
+    const body = document.getElementById('pg-body');
+    if (step===0) this.pgSettings(body);
+    else if (step===1) this.pgAttendance(body);
+    else this.pgLineup(body);
+  },
+
+  pgSettings(el) {
+    const s = this.S.pg.settings;
+    el.innerHTML = `
+      <div class="card">
+        ${[
+          ['halfLen',   'Half Length (minutes)', 5, 45],
+          ['halves',    'Number of Halves',      1, 4],
+          ['fieldN',    'Players on Field',      3, 11],
+          ['alertMin',  'Sub Alert After (min)', 5, 45],
+        ].map(([k,lbl,mn,mx])=>`
+          <div style="margin-bottom:18px">
+            <div class="label">${lbl}</div>
+            <div class="num-ctrl">
+              <button onclick="App.adj('${k}',-1,${mn},${mx})">&#8722;</button>
+              <div class="val" id="v-${k}">${s[k]}</div>
+              <button onclick="App.adj('${k}',1,${mn},${mx})">+</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn btn-green" onclick="App.pgNext()">Next &#8594;</button>
+    `;
+  },
+
+  adj(k, d, mn, mx) {
+    const s = this.S.pg.settings;
+    s[k] = Math.max(mn, Math.min(mx, s[k]+d));
+    const el = document.getElementById('v-'+k);
+    if (el) el.textContent = s[k];
+  },
+
+  pgAttendance(el) {
+    const pg = this.S.pg;
+    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id)).length;
+    el.innerHTML = `
+      <p style="color:var(--muted);font-size:14px;margin-bottom:12px">
+        Tap a player to mark absent. <strong style="color:var(--text)">${present} present.</strong>
+      </p>
+      <div id="att-list">
+        ${this.S.squad.map(p=>{
+          const away = pg.absent.includes(p.id);
+          return `<div class="att-item ${away?'away':''}" onclick="App.toggleAbsent('${p.id}')">
+            <div class="check">${away?'':'&#10003;'}</div>
+            <div class="player-name">${this.esc(p.name)}</div>
+            ${away?'<span style="font-size:11px;color:var(--muted)">AWAY</span>':''}
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="mt16"><button class="btn btn-green" onclick="App.pgNext()">Next &#8594;</button></div>
+    `;
+  },
+
+  toggleAbsent(id) {
+    const pg = this.S.pg;
+    const i = pg.absent.indexOf(id);
+    if (i===-1) { pg.absent.push(id); pg.lineup = pg.lineup.filter(x=>x!==id); }
+    else pg.absent.splice(i,1);
+    this.render_pregame();
+  },
+
+  pgLineup(el) {
+    const pg = this.S.pg;
+    const n = pg.settings.fieldN;
+    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
+    const onField = present.filter(p=>pg.lineup.includes(p.id));
+    const onBench = present.filter(p=>!pg.lineup.includes(p.id));
+    const ok = onField.length === n;
+
+    el.innerHTML = `
+      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">
+        Tap to add/remove from starting lineup.
+        <strong style="color:${ok?'var(--green)':'var(--text)'}"> ${onField.length}/${n} selected.</strong>
+      </p>
+      <div class="sec">&#9917; On Field (${onField.length}/${n})</div>
+      <div class="lu-grid" style="margin-bottom:16px">
+        ${onField.map(p=>`<div class="lu-card field" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
+        ${onField.length===0?'<div style="color:var(--muted);font-size:13px;padding:4px">None yet</div>':''}
+      </div>
+      <div class="sec">&#129681; Bench (${onBench.length})</div>
+      <div class="lu-grid" style="margin-bottom:20px">
+        ${onBench.map(p=>`<div class="lu-card" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
+      </div>
+      <button class="btn ${ok?'btn-green':'btn-ghost'}" onclick="App.kickOff()" ${ok?'':'style="opacity:0.5"'}>
+        ${ok ? '&#9654; Kick Off!' : `Select ${n-onField.length} more starter${n-onField.length!==1?'s':''}`}
+      </button>
+    `;
+  },
+
+  toggleLineup(id) {
+    const pg = this.S.pg;
+    const i = pg.lineup.indexOf(id);
+    if (i===-1) {
+      if (pg.lineup.length >= pg.settings.fieldN) { this.toast(`Max ${pg.settings.fieldN} starters`); return; }
+      pg.lineup.push(id);
+    } else {
+      pg.lineup.splice(i,1);
+    }
+    this.render_pregame();
+  },
+
+  pgNext() {
+    if (this.S.pgStep===1) {
+      const present = this.S.squad.filter(p=>!this.S.pg.absent.includes(p.id));
+      if (present.length < 2) { this.toast('Need at least 2 present players'); return; }
+    }
+    this.S.pgStep++;
+    this.render_pregame();
+  },
+
+  pgBack() { this.S.pgStep--; this.render_pregame(); },
+
+  // ── KICK OFF ───────────────────────────────────────────────
+  kickOff() {
+    const pg = this.S.pg;
+    if (pg.lineup.length !== pg.settings.fieldN) return;
+
+    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
+    const bench   = present.filter(p=>!pg.lineup.includes(p.id)).map(p=>p.id);
+    const now     = Date.now();
+
+    this.S.defaults = { ...pg.settings };
+
+    const stats = {};
+    [...pg.lineup, ...bench].forEach(id => {
+      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null };
+    });
+
+    this.S.game = {
+      date:       new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
+      settings:   { ...pg.settings },
+      phase:      'first_half',
+      half:       1,
+      halfStart:  now,
+      elapsed:    0,
+      field:      [...pg.lineup],
+      bench:      [...bench],
+      absent:     [...pg.absent],
+      subLog:     [],
+      subCount:   0,
+      stats,
+    };
+
+    this.save();
+    this.go('game');
+    this.startTimer();
+  },
+
+  // ── TIMER ──────────────────────────────────────────────────
+  startTimer() {
+    if (this.timer) clearInterval(this.timer);
+    this.timer = setInterval(()=>this.tick(), 1000);
+  },
+
+  stopTimer() { clearInterval(this.timer); this.timer = null; },
+
+  tick() { if (this.S.game) this.updateGameUI(); },
+
+  gameSeconds() {
+    const g = this.S.game;
+    if (!g) return 0;
+    if (g.phase === 'halftime') return g.elapsed;
+    return g.elapsed + Math.floor((Date.now() - g.halfStart) / 1000);
+  },
+
+  halfSeconds() {
+    const g = this.S.game;
+    return Math.floor((Date.now() - g.halfStart) / 1000);
+  },
+
+  stintSecs(id) {
+    const st = this.S.game.stats[id];
+    if (!st || st.stintStart === null) return 0;
+    return this.gameSeconds() - st.stintStart;
+  },
+
+  totalSecs(id) {
+    const st = this.S.game.stats[id];
+    if (!st) return 0;
+    const cur = st.stintStart !== null ? this.gameSeconds() - st.stintStart : 0;
+    return st.total + cur;
+  },
+
+  // ── GAME UI ────────────────────────────────────────────────
+  render_game() {
+    const g = this.S.game;
+    if (!g) return;
+
+    document.getElementById('g-phase').textContent = g.half===1 ? '1ST HALF' : '2ND HALF';
+    document.getElementById('g-half-lbl').textContent = `Half ${g.half}`;
+    document.getElementById('g-pause-btn').textContent = g.phase==='second_half' ? '🏁' : '⏸';
+
+    this.updateGameUI();
+    this.renderPlayerGrids();
+    this.renderHint();
+    this.renderGameFooter();
+  },
+
+  updateGameUI() {
+    const g = this.S.game;
+    const hs = this.halfSeconds();
+    const limit = g.settings.halfLen * 60;
+    const over  = hs > limit;
+
+    const clk = document.getElementById('g-clock');
+    if (clk) { clk.textContent = this.fmt(hs); clk.style.color = over ? 'var(--amber)' : 'var(--green)'; }
+
+    const subLbl = document.getElementById('g-sub-lbl');
+    if (subLbl) subLbl.textContent = `🔄 ${g.subCount} sub${g.subCount!==1?'s':''}`;
+
+    const alertSecs = g.settings.alertMin * 60;
+
+    g.field.forEach(id=>{
+      const el = document.getElementById('pc-'+id);
+      if (!el) return;
+      const ss = this.stintSecs(id);
+      const ts = this.totalSecs(id);
+      const st = el.querySelector('.pc-time');
+      const tt = el.querySelector('.pc-total');
+      if (st) st.textContent = this.fmt(ss);
+      if (tt) tt.textContent = `${this.mins(ts)}m total`;
+      el.classList.remove('warn','over');
+      if (ss >= alertSecs) el.classList.add('over');
+      else if (ss >= alertSecs - 120) el.classList.add('warn');
+    });
+
+    g.bench.forEach(id=>{
+      const el = document.getElementById('pc-'+id);
+      if (!el) return;
+      const ts = this.totalSecs(id);
+      const tt = el.querySelector('.pc-total');
+      if (tt) tt.textContent = `${this.mins(ts)}m played`;
+    });
+  },
+
+  renderPlayerGrids() {
+    const g   = this.S.game;
+    const sel = this.S.sel;
+    const alertSecs = g.settings.alertMin * 60;
+
+    const card = (id, zone) => {
+      const p  = this.player(id);
+      if (!p) return '';
+      const ss = zone==='field' ? this.stintSecs(id) : 0;
+      const ts = this.totalSecs(id);
+      const isSel = sel === id;
+      let cls = zone==='field' ? 'pc field' : 'pc bench';
+      if (zone==='field') {
+        if (ss >= alertSecs) cls += ' over';
+        else if (ss >= alertSecs-120) cls += ' warn';
+      }
+      if (isSel) cls += ' sel';
+      return `<div class="${cls}" id="pc-${id}" onclick="App.tap('${id}')">
+        <div class="pc-dot"></div>
+        <div class="pc-name">${this.esc(p.name)}</div>
+        <div class="pc-time">${zone==='field' ? this.fmt(ss) : '&#129681;'}</div>
+        <div class="pc-total">${zone==='field' ? `${this.mins(ts)}m total` : `${this.mins(ts)}m played`}</div>
+      </div>`;
+    };
+
+    const body = document.getElementById('g-body');
+    body.innerHTML = `
+      <div class="zone">
+        <div class="zone-lbl">&#9917; On Field <span class="zone-badge">${g.field.length}</span></div>
+        <div class="pgrid">${g.field.map(id=>card(id,'field')).join('')}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="zone" style="padding-bottom:12px">
+        <div class="zone-lbl">&#129681; Bench <span class="zone-badge">${g.bench.length}</span></div>
+        ${g.bench.length
+          ? `<div class="pgrid">${g.bench.map(id=>card(id,'bench')).join('')}</div>`
+          : `<div style="color:var(--muted);font-size:13px;padding:8px 4px">All players on field</div>`}
+      </div>
+    `;
+  },
+
+  renderHint() {
+    const el  = document.getElementById('g-hint');
+    const sel = this.S.sel;
+    if (!sel) { el.innerHTML=''; return; }
+    const p  = this.player(sel);
+    const on = this.S.game.field.includes(sel);
+    el.innerHTML = `<div class="hint">&#128260; ${this.esc(p.name)} selected &mdash; tap ${on?'a bench player to bring on':'a field player to replace'}</div>`;
+  },
+
+  renderGameFooter() {
+    document.getElementById('g-footer').innerHTML = `
+      <button class="btn btn-ghost" style="flex:1" onclick="App.showLog()">&#128203; Log</button>
+      <button class="btn btn-red"   style="flex:1" onclick="App.endGameReq()">&#127956; End Game</button>
+    `;
+  },
+
+  // ── SUB ────────────────────────────────────────────────────
+  tap(id) {
+    const g   = this.S.game;
+    const sel = this.S.sel;
+
+    if (!sel) { this.S.sel = id; this.render_game(); return; }
+    if (sel === id) { this.S.sel = null; this.render_game(); return; }
+
+    const selField = g.field.includes(sel);
+    const tapField = g.field.includes(id);
+
+    if (selField === tapField) { this.S.sel = id; this.render_game(); return; }
+
+    const fieldId = selField ? sel : id;
+    const benchId = selField ? id  : sel;
+    this.makeSub(fieldId, benchId);
+  },
+
+  makeSub(fieldId, benchId) {
+    const g  = this.S.game;
+    const gs = this.gameSeconds();
+    const fp = this.player(fieldId);
+    const bp = this.player(benchId);
+
+    g.field = g.field.map(id=>id===fieldId?benchId:id);
+    g.bench = g.bench.map(id=>id===benchId?fieldId:id);
+
+    const fs = g.stats[fieldId];
+    if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
+    g.stats[benchId].stintStart = gs;
+
+    g.subLog.push({ t: this.fmt(this.halfSeconds()), half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
+    g.subCount++;
+
+    this.S.sel = null;
+    this.toast(`${bp.name} on for ${fp.name}`);
+    this.save();
+    this.render_game();
+  },
+
+  // ── HALFTIME ───────────────────────────────────────────────
+  halfOrEnd() {
+    const g = this.S.game;
+    if (g.phase === 'second_half') { this.endGameReq(); return; }
+    this.confirm('Go to half time?', ()=>this.goHalftime());
+  },
+
+  goHalftime() {
+    const g = this.S.game;
+    g.elapsed += Math.floor((Date.now()-g.halfStart)/1000);
+    g.phase = 'halftime';
+    this.stopTimer();
+    this.save();
+    this.go('halftime');
+  },
+
+  render_halftime() {
+    const g = this.S.game;
+    document.getElementById('ht-clock').textContent = this.fmt(g.elapsed);
+
+    const ids = [...g.field, ...g.bench];
+    const sorted = [...ids].sort((a,b)=>this.totalSecs(b)-this.totalSecs(a));
+    const maxSecs = sorted.length ? this.totalSecs(sorted[0]) : 1;
+
+    document.getElementById('ht-stats').innerHTML = sorted.map(id=>{
+      const p    = this.player(id);
+      if (!p) return '';
+      const secs = this.totalSecs(id);
+      const pct  = Math.min(100,(secs/maxSecs)*100);
+      const onF  = g.field.includes(id);
+      return `<div class="ht-row">
+        <div class="ht-name">${this.esc(p.name)} ${onF?'&#9917;':'&#129681;'}</div>
+        <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
+        <span class="ht-mins">${this.mins(secs)}</span><span class="ht-unit">m</span>
+      </div>`;
+    }).join('');
+
+    document.getElementById('ht-log').innerHTML = this.renderLogItems(g.subLog) || '<div style="color:var(--muted);font-size:14px">No subs yet</div>';
+  },
+
+  resumeGame() {
+    const g = this.S.game;
+    g.phase = 'second_half';
+    g.half  = 2;
+    g.halfStart = Date.now();
+    this.save();
+    this.go('game');
+    this.startTimer();
+  },
+
+  // ── END GAME ───────────────────────────────────────────────
+  endGameReq() {
+    this.confirm('End the game now?', ()=>this.endGame());
+  },
+
+  endGame() {
+    const g  = this.S.game;
+    const gs = this.gameSeconds();
+    g.field.forEach(id=>{
+      const st = g.stats[id];
+      if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
+    });
+    g.phase       = 'finished';
+    g.totalSeconds = gs;
+    this.stopTimer();
+    this.save();
+    this.go('postgame');
+  },
+
+  // ── POST-GAME ──────────────────────────────────────────────
+  render_postgame() {
+    const g = this.S.game;
+    document.getElementById('pg-date').textContent = g.date;
+
+    const ids     = [...new Set([...g.field,...g.bench])];
+    const totalM  = this.mins(g.totalSeconds||0);
+
+    document.getElementById('pg-stats').innerHTML = `
+      <div class="stat-box"><div class="stat-val">${totalM}'</div><div class="stat-lbl">Game Time</div></div>
+      <div class="stat-box"><div class="stat-val">${g.subCount}</div><div class="stat-lbl">Subs</div></div>
+      <div class="stat-box"><div class="stat-val">${ids.length}</div><div class="stat-lbl">Players Used</div></div>
+    `;
+
+    const sorted  = [...ids].sort((a,b)=>g.stats[b].total - g.stats[a].total);
+    const maxSecs = sorted.length ? g.stats[sorted[0]].total : 1;
+
+    document.getElementById('pg-players').innerHTML = sorted.map(id=>{
+      const p   = this.player(id);
+      if (!p) return '';
+      const sec = g.stats[id].total;
+      const pct = Math.min(100,(sec/maxSecs)*100);
+      return `<div class="ht-row" style="margin-bottom:8px">
+        <div class="ht-name">${this.esc(p.name)}</div>
+        <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
+        <span class="ht-mins">${this.mins(sec)}</span><span class="ht-unit">m</span>
+      </div>`;
+    }).join('');
+
+    document.getElementById('pg-log').innerHTML = this.renderLogItems(g.subLog) || '<div style="color:var(--muted);font-size:14px">No subs were made</div>';
+  },
+
+  saveGame() {
+    const g = this.S.game;
+    this.S.history.unshift({ ...g, savedAt: Date.now() });
+    if (this.S.history.length > 30) this.S.history.length = 30;
+    this.S.game = null;
+    this.save();
+    this.toast('Game saved');
+    this.go('home');
+  },
+
+  // ── HISTORY ────────────────────────────────────────────────
+  render_history() {
+    const el = document.getElementById('hist-body');
+    if (!this.S.history.length) {
+      el.innerHTML = `<div class="empty"><big>&#128203;</big>No games saved yet.</div>`;
+      return;
+    }
+    el.innerHTML = this.S.history.map((g,i)=>{
+      const ids = [...new Set([...g.field,...g.bench])];
+      return `<div class="hist-item" onclick="App.histDetail(${i})">
+        <div class="hist-icon">&#9917;</div>
+        <div class="hist-info">
+          <div class="hist-date">${g.date}</div>
+          <div class="hist-meta">${ids.length} players &middot; ${this.mins(g.totalSeconds||0)} min &middot; ${g.subCount} subs</div>
+        </div>
+        <div class="hist-arr">&#8250;</div>
+      </div>`;
+    }).join('');
+  },
+
+  histDetail(i) {
+    const g      = this.S.history[i];
+    const ids    = [...new Set([...g.field,...g.bench])];
+    const sorted = [...ids].sort((a,b)=>(g.stats[b]?.total||0)-(g.stats[a]?.total||0));
+    const maxS   = sorted.length ? (g.stats[sorted[0]]?.total||1) : 1;
+
+    const el = document.getElementById('hist-body');
+    el.innerHTML = `
+      <button class="btn btn-ghost btn-sm" style="width:auto;margin-bottom:14px" onclick="App.render_history()">&#8592; Back</button>
+      <div class="card">
+        <div style="font-weight:700;font-size:16px">${g.date}</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px">${ids.length} players &middot; ${this.mins(g.totalSeconds||0)} min &middot; ${g.subCount} subs</div>
+      </div>
+      <div class="sec">Player Minutes</div>
+      ${sorted.map(id=>{
+        const p   = this.player(id);
+        if (!p) return `<div class="ht-row" style="margin-bottom:8px"><div class="ht-name" style="color:var(--muted)">[removed]</div><span class="ht-mins">${this.mins(g.stats[id]?.total||0)}</span><span class="ht-unit">m</span></div>`;
+        const sec = g.stats[id]?.total||0;
+        const pct = Math.min(100,(sec/maxS)*100);
+        return `<div class="ht-row" style="margin-bottom:8px">
+          <div class="ht-name">${this.esc(p.name)}</div>
+          <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
+          <span class="ht-mins">${this.mins(sec)}</span><span class="ht-unit">m</span>
+        </div>`;
+      }).join('')}
+      ${g.subLog.length ? `<div class="sec mt16">Substitutions</div>${this.renderLogItems(g.subLog)}` : ''}
+      <div class="mt16">
+        <button class="btn btn-red btn-sm" style="width:auto" onclick="App.deleteGame(${i})">Delete Game</button>
+      </div>
+    `;
+  },
+
+  deleteGame(i) {
+    this.confirm('Delete this game from history?', ()=>{
+      this.S.history.splice(i,1);
+      this.save();
+      this.render_history();
+    });
+  },
+
+  // ── SUB LOG ────────────────────────────────────────────────
+  renderLogItems(log) {
+    return log.map(s=>`
+      <div class="log-item">
+        <span class="log-time">${s.t}</span>
+        <span class="log-half">H${s.half}</span>
+        <span class="log-on">&#8593; ${this.esc(s.onName)}</span>
+        <span class="log-dot">&middot;</span>
+        <span class="log-off">&#8595; ${this.esc(s.offName)}</span>
+      </div>
+    `).join('');
+  },
+
+  showLog() {
+    const g = this.S.game;
+    if (!g.subLog.length) { this.toast('No subs yet'); return; }
+    this.modal(`
+      <div class="sheet-title">
+        <strong>Sub Log</strong>
+        <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
+      </div>
+      ${this.renderLogItems(g.subLog)}
+    `);
+  },
+
+  // ── INIT ───────────────────────────────────────────────────
+  init() {
+    this.load();
+    if (this.S.game && ['first_half','second_half'].includes(this.S.game.phase)) {
+      this.startTimer();
+    }
+    this.go('home');
+  },
+};
+
+document.addEventListener('DOMContentLoaded', ()=>App.init());
+</script>
+</body>
+</html>
