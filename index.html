@@ -7,6 +7,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0d0d14">
   <title>SubTracker</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAFOklEQVR42u3dS25bQQxE0R54FMCzrDVLzjqcDQSQnppkFesCHCY203XQit6Hfb6/f1PU4zosAQUgCkAUgCgAURSAKABRAKIARFEAogBEAch3gf7+YREA9F8ctwpAcLlcAAINmFIBibhJkHRwg6R0QEZu9kk60IFRIqA1dNwZHejAKAXQejqOjA50YLQZUCwdF0YHPRhaCAgxLowOejC0BxA+7Bgd9GBoAyBAmBo60IGRMaBbi/j19etfGaV+t+FQQHfDMDJU0XAcoIowLAzVNRwEqCgJcUYNDUcAaghD0FBbw8sBtYWhw6i/27WAmsNQMDTV8EJAU2EMGppteBWgwSRGGIk0vASQSBhthqQatgckFUaDIcGGjQGpJVHKSLnhOEDVYVw3JN6wJSDxMG4xcunWDJBFGJ+n4tWwDSCvMB5HYtdwhSEJQLNJPEjFrmEnQI7bjykghU3oZP7H+fM8fAHdNQQgAMkA8vo+7A5I5PL02XGznW9hU4YABCABQF43BBYA0nkOH0BBV6JFAdndkgTQRUMAAtAoILunatzvxlc8yQQgAHkCcnkkFEB1huQANUeS2bAEIK/n0gFUZAhAAJoA5PVqFQ/V1xkCEIAABCAvQF6vl/NiYakhAL3UA4AA9HYeH/55AM2PdZ7K4/rfMhpM866hUECf/FK1hgEklEfPX88F5DUl7q08pn6I5ny+PYDEmXL+Rjog0x0CQHv0rDRUAgg9GALQqgs2ANqmZ5MhAE0++QWgbYDc394CUJwed0OXAUEnkFE6IJ1RmKaGogFJ6TE1FApIkI4pI0tAn6/yYkDNBP0AWY9c6RwlA6CXUt9nSGR9tgFaNv6y898CoJID1dcA0n9b/hiNAor6Gu8yNOh4TSILAWQ0uWwGUNSJTJ2diwISvMq38laG4wzX1h1o9t1kcUCC17uFPsJGUjEC5HuiTwegwWz09bifNl8OaDYhcUALzqUrBKSQkywgi4vgk4CSo5JtyQaQVGBqgIyuhg8AEvzWQyePGeUCkn0rA0AehgB05VMMQAAC0KUFCu9kHpCRIQC16QEQgACkelvDa3HkhisE3rbUv8XrNJ0DQADaBkhnwFQoIH1DRhPKdugBEIAApPekve/iyA0aX/bSjO+LRyqT6pU3IUZg9W8/AAKQ/Hlh6LFbHK0zUwHktThyh+5aA2r7+QASfbHwYrqmhko/vx4CUtuEOkPdDeiJBAC92y2AugEdn+OMlX+p4OfXc0A6m9BgissAPWQAoDN9anMoIAVDIuFpGmrQ0wpo93W8kPMJLwPiFLodhj4CEAiImypCgOwMcWPuop44QDxbogjIwpDFRDA7PSmAjE5XCQUka8jxmBUjPQACkAwgTUMAKtVzGZCgIQCV6tkPyGsiGIDYhLK2nxJAaoYAVKcnAhDXgfwAsQmFbD+FgKQMAahITy0gDK3XAyAAaQPSMZQMqDbfakCxhhL0NAESMRQIqCPZHkAKhtIANcXaBijKUIiebkDjhkIAtQbaDGjWUAKg7jT7Aa03lKNnDNCgocWAZnKcAjRlaCugsRAHAa00FKVnHtCIoWWAhuMbB9TPaA0gieBEAO0wlKZHC1CnIXdAQpFJAWpj5AtILixBQAuG54Xo0QUEI306BoAwJK7HAFA4I4NoLAAFMrIJxQhQCCOzOOwALWZkGYQpoGWMjCOwBrSAkf3iLwDkKGnPmm8CpC9p4VKvBKQmafMK7wY0iCllVXMAlZLKXcNkQC8iYxEARAGIAhAFIIoCEAUgCkAUgCgAsQQUgCgAUZ71A2ROPqV1tAD9AAAAAElFTkSuQmCC">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAFOklEQVR42u3dS25bQQxE0R54FMCzrDVLzjqcDQSQnppkFesCHCY203XQit6Hfb6/f1PU4zosAQUgCkAUgCgAURSAKABRAKIARFEAogBEAch3gf7+YREA9F8ctwpAcLlcAAINmFIBibhJkHRwg6R0QEZu9kk60IFRIqA1dNwZHejAKAXQejqOjA50YLQZUCwdF0YHPRhaCAgxLowOejC0BxA+7Bgd9GBoAyBAmBo60IGRMaBbi/j19etfGaV+t+FQQHfDMDJU0XAcoIowLAzVNRwEqCgJcUYNDUcAaghD0FBbw8sBtYWhw6i/27WAmsNQMDTV8EJAU2EMGppteBWgwSRGGIk0vASQSBhthqQatgckFUaDIcGGjQGpJVHKSLnhOEDVYVw3JN6wJSDxMG4xcunWDJBFGJ+n4tWwDSCvMB5HYtdwhSEJQLNJPEjFrmEnQI7bjykghU3oZP7H+fM8fAHdNQQgAMkA8vo+7A5I5PL02XGznW9hU4YABCABQF43BBYA0nkOH0BBV6JFAdndkgTQRUMAAtAoILunatzvxlc8yQQgAHkCcnkkFEB1huQANUeS2bAEIK/n0gFUZAhAAJoA5PVqFQ/V1xkCEIAABCAvQF6vl/NiYakhAL3UA4AA9HYeH/55AM2PdZ7K4/rfMhpM866hUECf/FK1hgEklEfPX88F5DUl7q08pn6I5ny+PYDEmXL+Rjog0x0CQHv0rDRUAgg9GALQqgs2ANqmZ5MhAE0++QWgbYDc394CUJwed0OXAUEnkFE6IJ1RmKaGogFJ6TE1FApIkI4pI0tAn6/yYkDNBP0AWY9c6RwlA6CXUt9nSGR9tgFaNv6y898CoJID1dcA0n9b/hiNAor6Gu8yNOh4TSILAWQ0uWwGUNSJTJ2diwISvMq38laG4wzX1h1o9t1kcUCC17uFPsJGUjEC5HuiTwegwWz09bifNl8OaDYhcUALzqUrBKSQkywgi4vgk4CSo5JtyQaQVGBqgIyuhg8AEvzWQyePGeUCkn0rA0AehgB05VMMQAAC0KUFCu9kHpCRIQC16QEQgACkelvDa3HkhisE3rbUv8XrNJ0DQADaBkhnwFQoIH1DRhPKdugBEIAApPekve/iyA0aX/bSjO+LRyqT6pU3IUZg9W8/AAKQ/Hlh6LFbHK0zUwHktThyh+5aA2r7+QASfbHwYrqmhko/vx4CUtuEOkPdDeiJBAC92y2AugEdn+OMlX+p4OfXc0A6m9BgissAPWQAoDN9anMoIAVDIuFpGmrQ0wpo93W8kPMJLwPiFLodhj4CEAiImypCgOwMcWPuop44QDxbogjIwpDFRDA7PSmAjE5XCQUka8jxmBUjPQACkAwgTUMAKtVzGZCgIQCV6tkPyGsiGIDYhLK2nxJAaoYAVKcnAhDXgfwAsQmFbD+FgKQMAahITy0gDK3XAyAAaQPSMZQMqDbfakCxhhL0NAESMRQIqCPZHkAKhtIANcXaBijKUIiebkDjhkIAtQbaDGjWUAKg7jT7Aa03lKNnDNCgocWAZnKcAjRlaCugsRAHAa00FKVnHtCIoWWAhuMbB9TPaA0gieBEAO0wlKZHC1CnIXdAQpFJAWpj5AtILixBQAuG54Xo0QUEI306BoAwJK7HAFA4I4NoLAAFMrIJxQhQCCOzOOwALWZkGYQpoGWMjCOwBrSAkf3iLwDkKGnPmm8CpC9p4VKvBKQmafMK7wY0iCllVXMAlZLKXcNkQC8iYxEARAGIAhAFIIoCEAUgCkAUgCgAsQQUgCgAUZ71A2ROPqV1tAD9AAAAAElFTkSuQmCC">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
@@ -144,7 +147,8 @@
     .pc.warn    { border-color: var(--amber); background: var(--amber-dim); }
     .pc.over    { border-color: var(--red);   background: var(--red-dim); }
     .pc.bench   { border-color: var(--border); background: var(--surface); }
-    .pc.sel     { box-shadow: 0 0 0 3px var(--purple); border-color: var(--purple) !important; background: var(--purple-dim) !important; transform: scale(1.05); }
+    .pc.sel-off { box-shadow: 0 0 0 3px var(--red);    border-color: var(--red) !important;    background: var(--red-dim) !important;             transform: scale(1.05); }
+    .pc.sel-on  { box-shadow: 0 0 0 3px var(--green);  border-color: var(--green) !important;  background: rgba(0,230,118,0.28) !important;        transform: scale(1.05); }
 
     .pc-dot { width: 7px; height: 7px; border-radius: 50%; position: absolute; top: 8px; right: 8px; }
     .pc.field .pc-dot { background: var(--green); }
@@ -159,7 +163,25 @@
     .hint-bar { padding: 0 12px 8px; }
     .hint { background: var(--purple-dim); border: 1px solid rgba(124,77,255,0.25); border-radius: 10px; padding: 9px 14px; font-size: 13px; color: var(--purple); text-align: center; }
 
+    .score-bar { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .score-side { flex: 1; display: flex; align-items: center; gap: 6px; }
+    .score-side.right { flex-direction: row-reverse; }
+    .score-btn-main { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 7px 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s, opacity 0.1s; }
+    .score-btn-main:active { transform: scale(0.96); opacity: 0.8; }
+    .score-num { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); line-height: 1; }
+    .score-team-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+    .score-undo { background: none; border: none; color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 6px 2px; flex-shrink: 0; }
+    .score-div { font-size: 20px; font-weight: 800; color: var(--muted); flex-shrink: 0; }
+
     .game-footer { display: flex; gap: 8px; padding: 10px 12px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+
+    /* ===== RANKING ===== */
+    .rank-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+    .rank-name { font-size: 12px; font-weight: 600; min-width: 54px; max-width: 54px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rank-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .rank-bar { height: 100%; border-radius: 3px; background: var(--green); transition: width 0.9s ease; }
+    .rank-mins { font-size: 12px; font-weight: 700; color: var(--green); min-width: 20px; text-align: right; }
+    .rank-bench { font-size: 11px; color: var(--muted); min-width: 28px; text-align: right; white-space: nowrap; }
 
     /* ===== HALFTIME ===== */
     .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
@@ -222,6 +244,12 @@
       <span class="sub" id="squad-sub"></span>
     </div>
     <div class="body">
+      <div style="margin-bottom:14px">
+        <div class="label">Team Name</div>
+        <input id="team-name-input" class="input" type="text" placeholder="e.g. Thunder FC" autocomplete="off"
+               oninput="App.saveTeamName(this.value)">
+      </div>
+      <div class="label">Players</div>
       <div class="add-row">
         <input id="new-player" class="input" type="text" placeholder="Player name" autocomplete="off"
                onkeydown="if(event.key==='Enter')App.addPlayer()">
@@ -256,6 +284,7 @@
         <span id="g-sub-lbl">🔄 0 subs</span>
         <span id="g-half-lbl">Half 1</span>
       </div>
+      <div class="score-bar" id="g-score"></div>
     </div>
     <div class="game-body" id="g-body"></div>
     <div class="hint-bar" id="g-hint"></div>
@@ -269,6 +298,8 @@
       <div class="card" style="text-align:center;margin-bottom:16px">
         <div class="sec" style="margin-bottom:4px">First Half</div>
         <div style="font-size:36px;font-weight:800;color:var(--green)" id="ht-clock">20:00</div>
+        <div style="font-size:22px;font-weight:800;margin-top:6px" id="ht-score">0 — 0</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="ht-score-lbl"></div>
       </div>
       <div class="sec">Minutes Played</div>
       <div id="ht-stats"></div>
@@ -286,6 +317,8 @@
       <div class="pg-hero">
         <big>🏆</big>
         <h2>Full Time!</h2>
+        <div style="font-size:36px;font-weight:800;margin:6px 0 2px" id="pg-score">0 — 0</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-bottom:4px" id="pg-score-lbl"></div>
         <p id="pg-date"></p>
       </div>
       <div class="stat-row" id="pg-stats"></div>
@@ -316,13 +349,14 @@ const App = {
   // ── State ──────────────────────────────────────────────────
   S: {
     squad: [],
-    defaults: { halfLen: 20, halves: 2, fieldN: 7, alertMin: 15 },
+    defaults: { halfLen: 20, halves: 2, fieldN: 7, alertMin: 15, teamName: '' },
     game: null,
     history: [],
     // transient
     pg: null,        // pregame wizard data
     pgStep: 0,
-    sel: null,       // selected player id for sub
+    selOff: [],      // field players coming off
+    selOn:  [],      // bench players going on
   },
 
   timer: null,
@@ -387,7 +421,8 @@ const App = {
   go(screen) {
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('s-'+screen).classList.add('active');
-    this.S.sel = null;
+    this.S.selOff = [];
+    this.S.selOn  = [];
     this['render_'+screen]();
   },
 
@@ -413,6 +448,8 @@ const App = {
   // ── SQUAD ──────────────────────────────────────────────────
   render_squad() {
     document.getElementById('squad-sub').textContent = `${this.S.squad.length} players`;
+    const tn = document.getElementById('team-name-input');
+    if (tn) tn.value = this.S.defaults.teamName || '';
     const el = document.getElementById('squad-list');
     if (!this.S.squad.length) {
       el.innerHTML = `<div class="empty"><big>&#128101;</big>Add your squad above.</div>`;
@@ -425,6 +462,11 @@ const App = {
         <button class="del" onclick="App.removePlayer('${p.id}')">&#10005;</button>
       </div>
     `).join('');
+  },
+
+  saveTeamName(val) {
+    this.S.defaults.teamName = val.trim();
+    this.save();
   },
 
   addPlayer() {
@@ -592,7 +634,7 @@ const App = {
 
     const stats = {};
     [...pg.lineup, ...bench].forEach(id => {
-      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null };
+      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1 };
     });
 
     this.S.game = {
@@ -607,6 +649,8 @@ const App = {
       absent:     [...pg.absent],
       subLog:     [],
       subCount:   0,
+      score:      { us: 0, them: 0 },
+      teamName:   pg.settings.teamName || '',
       stats,
     };
 
@@ -663,6 +707,7 @@ const App = {
     this.renderPlayerGrids();
     this.renderHint();
     this.renderGameFooter();
+    this.renderScore();
   },
 
   updateGameUI() {
@@ -700,6 +745,18 @@ const App = {
       const tt = el.querySelector('.pc-total');
       if (tt) tt.textContent = `${this.mins(ts)}m played`;
     });
+
+    // Update playing time ranking bars
+    const allIds = [...g.field, ...g.bench];
+    const rankMax = Math.max(...allIds.map(id => this.totalSecs(id)), 1);
+    allIds.forEach(id => {
+      const ts   = this.totalSecs(id);
+      const pct  = Math.min(100, (ts / rankMax) * 100);
+      const bar  = document.getElementById('rank-bar-'+id);
+      const mins = document.getElementById('rank-mins-'+id);
+      if (bar)  bar.style.width = pct + '%';
+      if (mins) mins.textContent = this.mins(ts);
+    });
   },
 
   renderPlayerGrids() {
@@ -712,13 +769,13 @@ const App = {
       if (!p) return '';
       const ss = zone==='field' ? this.stintSecs(id) : 0;
       const ts = this.totalSecs(id);
-      const isSel = sel === id;
       let cls = zone==='field' ? 'pc field' : 'pc bench';
       if (zone==='field') {
         if (ss >= alertSecs) cls += ' over';
         else if (ss >= alertSecs-120) cls += ' warn';
       }
-      if (isSel) cls += ' sel';
+      if (this.S.selOff.includes(id)) cls += ' sel-off';
+      if (this.S.selOn.includes(id))  cls += ' sel-on';
       return `<div class="${cls}" id="pc-${id}" onclick="App.tap('${id}')">
         <div class="pc-dot"></div>
         <div class="pc-name">${this.esc(p.name)}</div>
@@ -726,6 +783,10 @@ const App = {
         <div class="pc-total">${zone==='field' ? `${this.mins(ts)}m total` : `${this.mins(ts)}m played`}</div>
       </div>`;
     };
+
+    const allIds = [...g.field, ...g.bench];
+    const rankSorted = [...allIds].sort((a,b) => this.totalSecs(b) - this.totalSecs(a));
+    const rankMax = Math.max(...rankSorted.map(id => this.totalSecs(id)), 1);
 
     const body = document.getElementById('g-body');
     body.innerHTML = `
@@ -740,61 +801,150 @@ const App = {
           ? `<div class="pgrid">${g.bench.map(id=>card(id,'bench')).join('')}</div>`
           : `<div style="color:var(--muted);font-size:13px;padding:8px 4px">All players on field</div>`}
       </div>
+      <div class="divider"></div>
+      <div class="zone" style="padding-bottom:12px">
+        <div class="zone-lbl">&#9201; Playing Time</div>
+        ${rankSorted.map(id => {
+          const p = this.player(id);
+          if (!p) return '';
+          const ts = this.totalSecs(id);
+          const pct = Math.min(100, (ts / rankMax) * 100);
+          const bc = g.stats[id]?.benchCount || 0;
+          return `<div class="rank-row">
+            <div class="rank-name">${this.esc(p.name)}</div>
+            <div class="rank-bar-bg"><div class="rank-bar" id="rank-bar-${id}" style="width:${pct}%"></div></div>
+            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:10px;color:var(--muted)">m</span>
+            <span class="rank-bench">&#129681;${bc}</span>
+          </div>`;
+        }).join('')}
+      </div>
     `;
   },
 
   renderHint() {
     const el  = document.getElementById('g-hint');
-    const sel = this.S.sel;
-    if (!sel) { el.innerHTML=''; return; }
-    const p  = this.player(sel);
-    const on = this.S.game.field.includes(sel);
-    el.innerHTML = `<div class="hint">&#128260; ${this.esc(p.name)} selected &mdash; tap ${on?'a bench player to bring on':'a field player to replace'}</div>`;
+    const off = this.S.selOff;
+    const on  = this.S.selOn;
+    if (!off.length && !on.length) { el.innerHTML = ''; return; }
+
+    const offNames = off.map(id => this.esc(this.player(id)?.name || '?')).join(', ');
+    const onNames  = on.map(id  => this.esc(this.player(id)?.name || '?')).join(', ');
+    let msg = '';
+    if (off.length) msg += `<span style="color:var(--red)">&#8595; OFF: ${offNames}</span>`;
+    if (off.length && on.length) msg += '&ensp;';
+    if (on.length)  msg += `<span style="color:var(--green)">&#8593; ON: ${onNames}</span>`;
+
+    if (off.length !== on.length) {
+      const diff = off.length - on.length;
+      msg += `<br><span style="font-size:11px;color:var(--muted)">${diff > 0 ? `Select ${diff} more from bench` : `Select ${-diff} more from field`}</span>`;
+    }
+    el.innerHTML = `<div class="hint">${msg}</div>`;
   },
 
   renderGameFooter() {
+    const off   = this.S.selOff;
+    const on    = this.S.selOn;
+    const valid = off.length > 0 && off.length === on.length;
+    const n     = off.length;
     document.getElementById('g-footer').innerHTML = `
       <button class="btn btn-ghost" style="flex:1" onclick="App.showLog()">&#128203; Log</button>
-      <button class="btn btn-red"   style="flex:1" onclick="App.endGameReq()">&#127956; End Game</button>
+      ${valid
+        ? `<button class="btn btn-green" style="flex:2" onclick="App.makeInterchange()">&#128260; Interchange${n > 1 ? ` (${n})` : ''}</button>`
+        : `<button class="btn btn-red"   style="flex:1" onclick="App.endGameReq()">&#127956; End Game</button>`}
     `;
+  },
+
+  teamLabel() {
+    return this.esc(this.S.game?.teamName || this.S.defaults.teamName || 'US');
+  },
+
+  renderScore() {
+    const el = document.getElementById('g-score');
+    if (!el) return;
+    const s  = this.S.game?.score || { us: 0, them: 0 };
+    const us = this.teamLabel();
+    el.innerHTML = `
+      <div class="score-side">
+        <button class="score-btn-main" onclick="App.goal('us')">
+          <span class="score-team-lbl">${us}</span>
+          <span class="score-num">${s.us}</span>
+        </button>
+        <button class="score-undo" onclick="App.undoGoal('us')" title="Undo">&#8722;</button>
+      </div>
+      <div class="score-div">&#8212;</div>
+      <div class="score-side right">
+        <button class="score-btn-main" onclick="App.goal('them')">
+          <span class="score-num">${s.them}</span>
+          <span class="score-team-lbl">THEM</span>
+        </button>
+        <button class="score-undo" onclick="App.undoGoal('them')" title="Undo">&#8722;</button>
+      </div>
+    `;
+  },
+
+  goal(team) {
+    const g = this.S.game;
+    if (!g.score) g.score = { us: 0, them: 0 };
+    g.score[team]++;
+    this.save();
+    this.renderScore();
+    const lbl = team === 'us' ? this.teamLabel() : 'them';
+    this.toast(`&#9917; Goal to ${lbl}!`);
+  },
+
+  undoGoal(team) {
+    const g = this.S.game;
+    if (!g.score) g.score = { us: 0, them: 0 };
+    if (g.score[team] > 0) { g.score[team]--; this.save(); this.renderScore(); }
   },
 
   // ── SUB ────────────────────────────────────────────────────
   tap(id) {
-    const g   = this.S.game;
-    const sel = this.S.sel;
-
-    if (!sel) { this.S.sel = id; this.render_game(); return; }
-    if (sel === id) { this.S.sel = null; this.render_game(); return; }
-
-    const selField = g.field.includes(sel);
-    const tapField = g.field.includes(id);
-
-    if (selField === tapField) { this.S.sel = id; this.render_game(); return; }
-
-    const fieldId = selField ? sel : id;
-    const benchId = selField ? id  : sel;
-    this.makeSub(fieldId, benchId);
+    const g       = this.S.game;
+    const onField = g.field.includes(id);
+    const list    = onField ? this.S.selOff : this.S.selOn;
+    const i       = list.indexOf(id);
+    if (i === -1) list.push(id);
+    else list.splice(i, 1);
+    this.renderPlayerGrids();
+    this.renderHint();
+    this.renderGameFooter();
   },
 
-  makeSub(fieldId, benchId) {
+  makeInterchange() {
+    const off = [...this.S.selOff];
+    const on  = [...this.S.selOn];
+    if (!off.length || off.length !== on.length) return;
+
     const g  = this.S.game;
     const gs = this.gameSeconds();
-    const fp = this.player(fieldId);
-    const bp = this.player(benchId);
+    const t  = this.fmt(this.halfSeconds());
 
-    g.field = g.field.map(id=>id===fieldId?benchId:id);
-    g.bench = g.bench.map(id=>id===benchId?fieldId:id);
+    off.forEach((fieldId, i) => {
+      const benchId = on[i];
+      const fp = this.player(fieldId);
+      const bp = this.player(benchId);
 
-    const fs = g.stats[fieldId];
-    if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
-    g.stats[benchId].stintStart = gs;
+      g.field = g.field.map(id => id === fieldId ? benchId : id);
+      g.bench = g.bench.map(id => id === benchId ? fieldId : id);
 
-    g.subLog.push({ t: this.fmt(this.halfSeconds()), half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
-    g.subCount++;
+      const fs = g.stats[fieldId];
+      if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
+      if (!fs.benchCount) fs.benchCount = 0;
+      fs.benchCount++;
+      g.stats[benchId].stintStart = gs;
 
-    this.S.sel = null;
-    this.toast(`${bp.name} on for ${fp.name}`);
+      g.subLog.push({ t, half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
+      g.subCount++;
+    });
+
+    this.S.selOff = [];
+    this.S.selOn  = [];
+
+    const msg = off.length === 1
+      ? `${this.player(on[0])?.name} on for ${this.player(off[0])?.name}`
+      : `${off.length} interchanges made`;
+    this.toast(msg);
     this.save();
     this.render_game();
   },
@@ -818,6 +968,10 @@ const App = {
   render_halftime() {
     const g = this.S.game;
     document.getElementById('ht-clock').textContent = this.fmt(g.elapsed);
+    const hs  = g.score || { us: 0, them: 0 };
+    const usl = this.esc(g.teamName || 'US');
+    document.getElementById('ht-score').textContent = `${hs.us} — ${hs.them}`;
+    document.getElementById('ht-score-lbl').textContent = `${usl} — THEM`;
 
     const ids = [...g.field, ...g.bench];
     const sorted = [...ids].sort((a,b)=>this.totalSecs(b)-this.totalSecs(a));
@@ -872,6 +1026,10 @@ const App = {
   render_postgame() {
     const g = this.S.game;
     document.getElementById('pg-date').textContent = g.date;
+    const sc  = g.score || { us: 0, them: 0 };
+    const usl = this.esc(g.teamName || 'US');
+    document.getElementById('pg-score').textContent = `${sc.us} — ${sc.them}`;
+    document.getElementById('pg-score-lbl').textContent = `${usl} — THEM`;
 
     const ids     = [...new Set([...g.field,...g.bench])];
     const totalM  = this.mins(g.totalSeconds||0);
@@ -1006,6 +1164,12 @@ const App = {
 };
 
 document.addEventListener('DOMContentLoaded', ()=>App.init());
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
 </script>
 </body>
 </html>
