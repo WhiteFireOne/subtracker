@@ -576,7 +576,7 @@ const App = {
     const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
     const onField = present.filter(p=>pg.lineup.includes(p.id));
     const onBench = present.filter(p=>!pg.lineup.includes(p.id));
-    const ok = onField.length === n;
+    const ok = onField.length === Math.min(n, present.length);
 
     el.innerHTML = `
       <p style="color:var(--muted);font-size:14px;margin-bottom:14px">
@@ -593,7 +593,7 @@ const App = {
         ${onBench.map(p=>`<div class="lu-card" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
       </div>
       <button class="btn ${ok?'btn-green':'btn-ghost'}" onclick="App.kickOff()" ${ok?'':'style="opacity:0.5"'}>
-        ${ok ? '&#9654; Kick Off!' : `Select ${n-onField.length} more starter${n-onField.length!==1?'s':''}`}
+        ${ok ? '&#9654; Kick Off!' : `Select ${Math.min(n,present.length)-onField.length} more starter${Math.min(n,present.length)-onField.length!==1?'s':''}`}
       </button>
     `;
   },
@@ -602,7 +602,9 @@ const App = {
     const pg = this.S.pg;
     const i = pg.lineup.indexOf(id);
     if (i===-1) {
-      if (pg.lineup.length >= pg.settings.fieldN) { this.toast(`Max ${pg.settings.fieldN} starters`); return; }
+      const _presN = this.S.squad.filter(p=>!pg.absent.includes(p.id)).length;
+      const _maxF = Math.min(pg.settings.fieldN, _presN);
+      if (pg.lineup.length >= _maxF) { this.toast(`Max ${_maxF} starters`); return; }
       pg.lineup.push(id);
     } else {
       pg.lineup.splice(i,1);
@@ -624,9 +626,9 @@ const App = {
   // ── KICK OFF ───────────────────────────────────────────────
   kickOff() {
     const pg = this.S.pg;
-    if (pg.lineup.length !== pg.settings.fieldN) return;
-
     const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
+    if (pg.lineup.length !== Math.min(pg.settings.fieldN, present.length)) return;
+
     const bench   = present.filter(p=>!pg.lineup.includes(p.id)).map(p=>p.id);
     const now     = Date.now();
 
