@@ -277,7 +277,7 @@
           <div class="phase-lbl" id="g-phase">1ST HALF</div>
           <div class="clock" id="g-clock">00:00</div>
         </div>
-        <button class="btn-icon" id="g-pause-btn" onclick="App.halfOrEnd()">⏸</button>
+        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">⏸ End Half</button>
       </div>
       <div class="game-meta">
         <span id="g-field-lbl">⚽ 7 on field</span>
@@ -303,8 +303,10 @@
       </div>
       <div class="sec">Minutes Played</div>
       <div id="ht-stats"></div>
+      <div class="sec mt16">&#9917; 2nd Half Starting Lineup</div>
+      <div id="ht-lineup"></div>
       <div class="mt16">
-        <button class="btn btn-green" onclick="App.resumeGame()">&#9654; Start 2nd Half</button>
+        <button class="btn btn-ghost" id="ht-start-btn" onclick="App.resumeGame()" style="opacity:0.5" disabled>&#9654; Start 2nd Half</button>
       </div>
       <div class="sec mt16">Substitutions</div>
       <div id="ht-log"></div>
@@ -576,7 +578,7 @@ const App = {
     const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
     const onField = present.filter(p=>pg.lineup.includes(p.id));
     const onBench = present.filter(p=>!pg.lineup.includes(p.id));
-    const ok = onField.length === n;
+    const ok = onField.length === Math.min(n, present.length);
 
     el.innerHTML = `
       <p style="color:var(--muted);font-size:14px;margin-bottom:14px">
@@ -593,7 +595,7 @@ const App = {
         ${onBench.map(p=>`<div class="lu-card" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
       </div>
       <button class="btn ${ok?'btn-green':'btn-ghost'}" onclick="App.kickOff()" ${ok?'':'style="opacity:0.5"'}>
-        ${ok ? '&#9654; Kick Off!' : `Select ${n-onField.length} more starter${n-onField.length!==1?'s':''}`}
+        ${ok ? '&#9654; Kick Off!' : `Select ${Math.min(n,present.length)-onField.length} more starter${Math.min(n,present.length)-onField.length!==1?'s':''}`}
       </button>
     `;
   },
@@ -602,7 +604,9 @@ const App = {
     const pg = this.S.pg;
     const i = pg.lineup.indexOf(id);
     if (i===-1) {
-      if (pg.lineup.length >= pg.settings.fieldN) { this.toast(`Max ${pg.settings.fieldN} starters`); return; }
+      const _presN = this.S.squad.filter(p=>!pg.absent.includes(p.id)).length;
+      const _maxF = Math.min(pg.settings.fieldN, _presN);
+      if (pg.lineup.length >= _maxF) { this.toast(`Max ${_maxF} starters`); return; }
       pg.lineup.push(id);
     } else {
       pg.lineup.splice(i,1);
@@ -624,9 +628,9 @@ const App = {
   // ── KICK OFF ───────────────────────────────────────────────
   kickOff() {
     const pg = this.S.pg;
-    if (pg.lineup.length !== pg.settings.fieldN) return;
-
     const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
+    if (pg.lineup.length !== Math.min(pg.settings.fieldN, present.length)) return;
+
     const bench   = present.filter(p=>!pg.lineup.includes(p.id)).map(p=>p.id);
     const now     = Date.now();
 
@@ -701,7 +705,7 @@ const App = {
 
     document.getElementById('g-phase').textContent = g.half===1 ? '1ST HALF' : '2ND HALF';
     document.getElementById('g-half-lbl').textContent = `Half ${g.half}`;
-    document.getElementById('g-pause-btn').textContent = g.phase==='second_half' ? '🏁' : '⏸';
+    document.getElementById('g-pause-btn').textContent = g.phase==='second_half' ? '🏁 End Game' : '⏸ End Half';
 
     this.updateGameUI();
     this.renderPlayerGrids();
@@ -983,18 +987,76 @@ const App = {
       const secs = this.totalSecs(id);
       const pct  = Math.min(100,(secs/maxSecs)*100);
       const onF  = g.field.includes(id);
+      const bc   = g.stats[id]?.benchCount || 0;
       return `<div class="ht-row">
         <div class="ht-name">${this.esc(p.name)} ${onF?'&#9917;':'&#129681;'}</div>
         <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
         <span class="ht-mins">${this.mins(secs)}</span><span class="ht-unit">m</span>
+        <span class="rank-bench">&#129681;${bc}</span>
       </div>`;
     }).join('');
+
+    // 2nd half lineup picker
+    if (!g.htLineup) g.htLineup = [...g.field];
+    const allIds2 = [...g.field, ...g.bench];
+    const fieldN2 = Math.min(g.settings.fieldN, allIds2.length);
+    const htOnField = allIds2.filter(id => g.htLineup.includes(id));
+    const htOnBench = allIds2.filter(id => !g.htLineup.includes(id));
+    const htOk = htOnField.length === fieldN2;
+    document.getElementById('ht-lineup').innerHTML = `
+      <p style="color:var(--muted);font-size:13px;margin-bottom:10px">Tap to swap players on/off. Need ${fieldN2} on field.</p>
+      <div class="sec" style="margin-bottom:6px">&#9917; On Field (${htOnField.length}/${fieldN2})</div>
+      <div class="lu-grid" style="margin-bottom:12px">
+        ${htOnField.map(id=>{const p=this.player(id);return p?`<div class="lu-card field" onclick="App.toggleHtLineup('${id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`:''}).join('')}
+        ${htOnField.length===0?'<div style="color:var(--muted);font-size:13px;padding:4px">None selected</div>':''}
+      </div>
+      <div class="sec" style="margin-bottom:6px">&#129681; Bench (${htOnBench.length})</div>
+      <div class="lu-grid" style="margin-bottom:8px">
+        ${htOnBench.map(id=>{const p=this.player(id);return p?`<div class="lu-card" onclick="App.toggleHtLineup('${id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`:''}).join('')}
+      </div>
+    `;
+    const htBtn = document.getElementById('ht-start-btn');
+    htBtn.disabled = !htOk;
+    htBtn.style.opacity = htOk ? '1' : '0.5';
+    htBtn.className = `btn ${htOk ? 'btn-green' : 'btn-ghost'}`;
 
     document.getElementById('ht-log').innerHTML = this.renderLogItems(g.subLog) || '<div style="color:var(--muted);font-size:14px">No subs yet</div>';
   },
 
+  toggleHtLineup(id) {
+    const g = this.S.game;
+    const allIds = [...g.field, ...g.bench];
+    const fieldN = Math.min(g.settings.fieldN, allIds.length);
+    const i = g.htLineup.indexOf(id);
+    if (i === -1) {
+      if (g.htLineup.length >= fieldN) { this.toast(`Max ${fieldN} starters`); return; }
+      g.htLineup.push(id);
+    } else {
+      g.htLineup.splice(i, 1);
+    }
+    this.render_halftime();
+  },
+
   resumeGame() {
     const g = this.S.game;
+    const allIds = [...g.field, ...g.bench];
+    const lineup = (g.htLineup && g.htLineup.length > 0) ? g.htLineup : [...g.field];
+    const gs = g.elapsed; // game-seconds at 2nd half kickoff
+    // Bank time for players leaving field; start stint for players joining
+    g.field.forEach(id => {
+      if (!lineup.includes(id)) {
+        const st = g.stats[id];
+        if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
+        if (!st.benchCount) st.benchCount = 0;
+        st.benchCount++;
+      }
+    });
+    g.bench.forEach(id => {
+      if (lineup.includes(id)) g.stats[id].stintStart = gs;
+    });
+    g.field = allIds.filter(id => lineup.includes(id));
+    g.bench = allIds.filter(id => !lineup.includes(id));
+    g.htLineup = null;
     g.phase = 'second_half';
     g.half  = 2;
     g.halfStart = Date.now();
