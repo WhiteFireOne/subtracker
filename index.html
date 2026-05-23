@@ -178,10 +178,10 @@
     /* ===== RANKING ===== */
     .rank-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
     .rank-name { font-size: 12px; font-weight: 600; min-width: 54px; max-width: 54px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rank-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .rank-bar-bg { flex: 0 1 35%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
     .rank-bar { height: 100%; border-radius: 3px; background: var(--green); transition: width 0.9s ease; }
-    .rank-mins { font-size: 12px; font-weight: 700; color: var(--green); min-width: 20px; text-align: right; }
-    .rank-bench { font-size: 11px; color: var(--muted); min-width: 28px; text-align: right; white-space: nowrap; }
+    .rank-mins { font-size: 16px; font-weight: 700; color: var(--green); min-width: 26px; text-align: right; }
+    .rank-bench { font-size: 15px; color: var(--muted); min-width: 32px; text-align: right; white-space: nowrap; }
 
     /* ===== HALFTIME ===== */
     .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
@@ -817,7 +817,7 @@ const App = {
           return `<div class="rank-row">
             <div class="rank-name">${this.esc(p.name)}</div>
             <div class="rank-bar-bg"><div class="rank-bar" id="rank-bar-${id}" style="width:${pct}%"></div></div>
-            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:10px;color:var(--muted)">m</span>
+            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:13px;color:var(--muted)">m</span>
             <span class="rank-bench">&#129681;${bc}</span>
           </div>`;
         }).join('')}
