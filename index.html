@@ -735,53 +735,96 @@ const App = {
     return this.gameSeconds() - st.benchStart;
   },
 
-  suggestSub() {
+  suggestSub(count) {
     const g = this.S.game;
-    if (!g || !g.bench.length) return null;
-    const fieldCandidates = [...g.field].sort((a, b) => {
-      const tDiff = this.totalSecs(b) - this.totalSecs(a);
-      if (Math.abs(tDiff) > 30) return tDiff;
-      return (g.stats[a].benchCount||0) - (g.stats[b].benchCount||0);
-    });
-    const benchCandidates = [...g.bench].sort((a, b) => {
-      const bDiff = this.benchSecs(b) - this.benchSecs(a);
-      if (Math.abs(bDiff) > 30) return bDiff;
-      const bcDiff = (g.stats[b].benchCount||0) - (g.stats[a].benchCount||0);
-      if (bcDiff !== 0) return bcDiff;
-      return this.totalSecs(a) - this.totalSecs(b);
-    });
-    return { off: fieldCandidates[0], on: benchCandidates[0] };
+    if (!g || !g.bench.length) return [];
+    const max = Math.min(count, g.field.length, g.bench.length);
+    const results = [];
+    const usedField = new Set();
+    const usedBench = new Set();
+    for (let i = 0; i < max; i++) {
+      const fc = [...g.field].filter(id => !usedField.has(id)).sort((a, b) => {
+        const tDiff = this.totalSecs(b) - this.totalSecs(a);
+        if (Math.abs(tDiff) > 30) return tDiff;
+        return (g.stats[a].benchCount||0) - (g.stats[b].benchCount||0);
+      });
+      const bc = [...g.bench].filter(id => !usedBench.has(id)).sort((a, b) => {
+        const bDiff = this.benchSecs(b) - this.benchSecs(a);
+        if (Math.abs(bDiff) > 30) return bDiff;
+        const bcDiff = (g.stats[b].benchCount||0) - (g.stats[a].benchCount||0);
+        if (bcDiff !== 0) return bcDiff;
+        return this.totalSecs(a) - this.totalSecs(b);
+      });
+      if (!fc.length || !bc.length) break;
+      results.push({ off: fc[0], on: bc[0] });
+      usedField.add(fc[0]);
+      usedBench.add(bc[0]);
+    }
+    return results;
   },
 
-  showSuggest() {
-    const s = this.suggestSub();
-    if (!s) return;
+  showSuggest(n) {
     const g = this.S.game;
-    const offP     = this.player(s.off);
-    const onP      = this.player(s.on);
-    const offTotal = this.mins(this.totalSecs(s.off));
-    const offStint = this.mins(this.stintSecs(s.off));
-    const offBc    = g.stats[s.off].benchCount || 0;
-    const onWait   = this.mins(this.benchSecs(s.on));
-    const onTotal  = this.mins(this.totalSecs(s.on));
-    const onBc     = g.stats[s.on].benchCount || 0;
+    if (!g) return;
+    const maxSwaps = Math.min(g.field.length, g.bench.length);
+    if (!maxSwaps) return;
+    if (n !== undefined) { this.S.suggestN = n; this.save(); }
+    const count = Math.min(this.S.suggestN || 1, maxSwaps);
+    const suggestions = this.suggestSub(count);
+    if (!suggestions.length) return;
+
+    const pills = Array.from({length: maxSwaps}, (_, i) => i + 1).map(i =>
+      `<button onclick="App.showSuggest(${i})" style="background:${i===count?'var(--green)':'none'};border:1px solid ${i===count?'var(--green)':'var(--border)'};border-radius:6px;color:${i===count?'#000':'var(--text)'};font-size:12px;padding:2px 9px;cursor:pointer">${i}</button>`
+    ).join('');
+
+    const rows = suggestions.map(({ off, on }, idx) => {
+      const offP     = this.player(off);
+      const onP      = this.player(on);
+      const offTotal = this.mins(this.totalSecs(off));
+      const offStint = this.mins(this.stintSecs(off));
+      const offBc    = g.stats[off].benchCount || 0;
+      const onWait   = this.mins(this.benchSecs(on));
+      const onTotal  = this.mins(this.totalSecs(on));
+      const onBc     = g.stats[on].benchCount || 0;
+      return `
+        ${idx > 0 ? '<hr style="border:none;border-top:1px solid var(--border);margin:14px 0">' : ''}
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:1">
+            <div style="margin-bottom:8px">
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px">&#8595; Off</div>
+              <div style="font-size:18px;font-weight:700;color:#e05252">${this.esc(offP.name)}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">${offTotal}m total &nbsp;·&nbsp; ${offStint}m this stint &nbsp;·&nbsp; ${offBc} sit${offBc===1?'':'s'}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px">&#8593; On</div>
+              <div style="font-size:18px;font-weight:700;color:var(--green)">${this.esc(onP.name)}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">${onWait}m waiting &nbsp;·&nbsp; ${onTotal}m total &nbsp;·&nbsp; ${onBc} sit${onBc===1?'':'s'}</div>
+            </div>
+          </div>
+          <button onclick="App.queueSub('${off}','${on}')" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;padding:10px 14px;cursor:pointer;white-space:nowrap;flex-shrink:0">Queue &#8594;</button>
+        </div>`;
+    }).join('');
+
+    document.querySelector('.sheet-bg')?.remove();
     this.modal(`
       <div class="sheet-title">
-        <strong>&#128161; Sub Suggestion</strong>
+        <div style="display:flex;align-items:center;gap:10px">
+          <strong>&#128161; Suggestions</strong>
+          <div style="display:flex;gap:4px">${pills}</div>
+        </div>
         <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
       </div>
-      <div style="margin-bottom:18px">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8595; Take off</div>
-        <div style="font-size:20px;font-weight:700;color:#e05252">${this.esc(offP.name)}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:4px">${offTotal}m total &nbsp;·&nbsp; ${offStint}m this stint &nbsp;·&nbsp; ${offBc} bench sit${offBc===1?'':'s'}</div>
-      </div>
-      <div style="margin-bottom:22px">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8593; Put on</div>
-        <div style="font-size:20px;font-weight:700;color:var(--green)">${this.esc(onP.name)}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:4px">${onWait}m waiting &nbsp;·&nbsp; ${onTotal}m total &nbsp;·&nbsp; ${onBc} bench sit${onBc===1?'':'s'}</div>
-      </div>
-      <button class="btn btn-ghost btn-sm" style="width:100%" onclick="this.closest('.sheet-bg').remove()">Dismiss</button>
+      ${rows}
+      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:16px" onclick="this.closest('.sheet-bg').remove()">Dismiss</button>
     `);
+  },
+
+  queueSub(offId, onId) {
+    document.querySelector('.sheet-bg')?.remove();
+    this.S.selOff = [offId];
+    this.S.selOn  = [onId];
+    this.renderPlayerGrids();
+    this.renderHint();
   },
 
   totalSecs(id) {
