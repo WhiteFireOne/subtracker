@@ -638,7 +638,7 @@ const App = {
 
     const stats = {};
     [...pg.lineup, ...bench].forEach(id => {
-      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1 };
+      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1, benchStart: pg.lineup.includes(id) ? null : 0 };
     });
 
     this.S.game = {
@@ -689,6 +689,61 @@ const App = {
     const st = this.S.game.stats[id];
     if (!st || st.stintStart === null) return 0;
     return this.gameSeconds() - st.stintStart;
+  },
+
+  benchSecs(id) {
+    const st = this.S.game?.stats[id];
+    if (!st || st.benchStart == null) return 0;
+    return this.gameSeconds() - st.benchStart;
+  },
+
+  suggestSub() {
+    const g = this.S.game;
+    if (!g || !g.bench.length) return null;
+    const fieldCandidates = [...g.field].sort((a, b) => {
+      const tDiff = this.totalSecs(b) - this.totalSecs(a);
+      if (Math.abs(tDiff) > 30) return tDiff;
+      return (g.stats[a].benchCount||0) - (g.stats[b].benchCount||0);
+    });
+    const benchCandidates = [...g.bench].sort((a, b) => {
+      const bDiff = this.benchSecs(b) - this.benchSecs(a);
+      if (Math.abs(bDiff) > 30) return bDiff;
+      const bcDiff = (g.stats[b].benchCount||0) - (g.stats[a].benchCount||0);
+      if (bcDiff !== 0) return bcDiff;
+      return this.totalSecs(a) - this.totalSecs(b);
+    });
+    return { off: fieldCandidates[0], on: benchCandidates[0] };
+  },
+
+  showSuggest() {
+    const s = this.suggestSub();
+    if (!s) return;
+    const g = this.S.game;
+    const offP     = this.player(s.off);
+    const onP      = this.player(s.on);
+    const offTotal = this.mins(this.totalSecs(s.off));
+    const offStint = this.mins(this.stintSecs(s.off));
+    const offBc    = g.stats[s.off].benchCount || 0;
+    const onWait   = this.mins(this.benchSecs(s.on));
+    const onTotal  = this.mins(this.totalSecs(s.on));
+    const onBc     = g.stats[s.on].benchCount || 0;
+    this.modal(`
+      <div class="sheet-title">
+        <strong>&#128161; Sub Suggestion</strong>
+        <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
+      </div>
+      <div style="margin-bottom:18px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8595; Take off</div>
+        <div style="font-size:20px;font-weight:700;color:#e05252">${this.esc(offP.name)}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">${offTotal}m total &nbsp;·&nbsp; ${offStint}m this stint &nbsp;·&nbsp; ${offBc} bench sit${offBc===1?'':'s'}</div>
+      </div>
+      <div style="margin-bottom:22px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8593; Put on</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">${this.esc(onP.name)}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">${onWait}m waiting &nbsp;·&nbsp; ${onTotal}m total &nbsp;·&nbsp; ${onBc} bench sit${onBc===1?'':'s'}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="width:100%" onclick="this.closest('.sheet-bg').remove()">Dismiss</button>
+    `);
   },
 
   totalSecs(id) {
@@ -807,7 +862,10 @@ const App = {
       </div>
       <div class="divider"></div>
       <div class="zone" style="padding-bottom:12px">
-        <div class="zone-lbl">&#9201; Playing Time</div>
+        <div class="zone-lbl" style="justify-content:space-between;padding-right:4px">
+          <span>&#9201; Playing Time</span>
+          <button onclick="App.showSuggest()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:3px 10px;cursor:pointer;line-height:1.4">&#128161; Suggest</button>
+        </div>
         ${rankSorted.map(id => {
           const p = this.player(id);
           if (!p) return '';
@@ -936,7 +994,9 @@ const App = {
       if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
       if (!fs.benchCount) fs.benchCount = 0;
       fs.benchCount++;
+      fs.benchStart = gs;
       g.stats[benchId].stintStart = gs;
+      g.stats[benchId].benchStart = null;
 
       g.subLog.push({ t, half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
       g.subCount++;
@@ -1049,10 +1109,11 @@ const App = {
         if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
         if (!st.benchCount) st.benchCount = 0;
         st.benchCount++;
+        st.benchStart = gs;
       }
     });
     g.bench.forEach(id => {
-      if (lineup.includes(id)) g.stats[id].stintStart = gs;
+      if (lineup.includes(id)) { g.stats[id].stintStart = gs; g.stats[id].benchStart = null; }
     });
     g.field = allIds.filter(id => lineup.includes(id));
     g.bench = allIds.filter(id => !lineup.includes(id));
