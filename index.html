@@ -178,10 +178,10 @@
     /* ===== RANKING ===== */
     .rank-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
     .rank-name { font-size: 12px; font-weight: 600; min-width: 54px; max-width: 54px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rank-bar-bg { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .rank-bar-bg { flex: 0 1 35%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
     .rank-bar { height: 100%; border-radius: 3px; background: var(--green); transition: width 0.9s ease; }
-    .rank-mins { font-size: 12px; font-weight: 700; color: var(--green); min-width: 20px; text-align: right; }
-    .rank-bench { font-size: 11px; color: var(--muted); min-width: 28px; text-align: right; white-space: nowrap; }
+    .rank-mins { font-size: 16px; font-weight: 700; color: var(--green); min-width: 26px; text-align: right; }
+    .rank-bench { font-size: 15px; color: var(--muted); min-width: 32px; text-align: right; white-space: nowrap; }
 
     /* ===== HALFTIME ===== */
     .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
@@ -274,10 +274,13 @@
     <div class="game-hdr">
       <div class="game-top">
         <div>
-          <div class="phase-lbl" id="g-phase">1ST HALF</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="phase-lbl" id="g-phase">1ST HALF</div>
+            <button id="g-game-pause-btn" onclick="App.togglePause()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;padding:2px 8px;cursor:pointer;line-height:1.5">&#9208; Pause</button>
+          </div>
           <div class="clock" id="g-clock">00:00</div>
         </div>
-        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">⏸ End Half</button>
+        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">&#9208; End Half</button>
       </div>
       <div class="game-meta">
         <span id="g-field-lbl">⚽ 7 on field</span>
@@ -638,7 +641,7 @@ const App = {
 
     const stats = {};
     [...pg.lineup, ...bench].forEach(id => {
-      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1 };
+      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1, benchStart: pg.lineup.includes(id) ? null : 0 };
     });
 
     this.S.game = {
@@ -671,24 +674,114 @@ const App = {
 
   stopTimer() { clearInterval(this.timer); this.timer = null; },
 
+  togglePause() {
+    const g = this.S.game;
+    if (!g) return;
+    if (g.phase === 'paused') {
+      g.halfStart = Date.now();
+      g.phase = g.prevPhase;
+      delete g.prevPhase;
+      this.startTimer();
+    } else {
+      const addSecs = Math.floor((Date.now() - g.halfStart) / 1000);
+      g.elapsed += addSecs;
+      g.halfElapsed = (g.halfElapsed || 0) + addSecs;
+      g.prevPhase = g.phase;
+      g.phase = 'paused';
+      this.stopTimer();
+      this.updateGameUI();
+    }
+    this.save();
+    this.renderPauseControls();
+  },
+
+  renderPauseControls() {
+    const g = this.S.game;
+    const paused = g.phase === 'paused';
+    const activePhase = paused ? g.prevPhase : g.phase;
+    const pauseBtn = document.getElementById('g-game-pause-btn');
+    const endBtn   = document.getElementById('g-pause-btn');
+    const phaseEl  = document.getElementById('g-phase');
+    if (pauseBtn) pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
+    if (endBtn)   { endBtn.disabled = paused; endBtn.style.opacity = paused ? '0.4' : '1'; endBtn.textContent = activePhase === 'second_half' ? '🏁 End Game' : '⏸ End Half'; }
+    if (phaseEl)  phaseEl.textContent = paused ? 'PAUSED' : (g.half === 1 ? '1ST HALF' : '2ND HALF');
+  },
+
   tick() { if (this.S.game) this.updateGameUI(); },
 
   gameSeconds() {
     const g = this.S.game;
     if (!g) return 0;
-    if (g.phase === 'halftime') return g.elapsed;
+    if (g.phase === 'halftime' || g.phase === 'paused') return g.elapsed;
     return g.elapsed + Math.floor((Date.now() - g.halfStart) / 1000);
   },
 
   halfSeconds() {
     const g = this.S.game;
-    return Math.floor((Date.now() - g.halfStart) / 1000);
+    const banked = g.halfElapsed || 0;
+    if (g.phase === 'paused') return banked;
+    return banked + Math.floor((Date.now() - g.halfStart) / 1000);
   },
 
   stintSecs(id) {
     const st = this.S.game.stats[id];
     if (!st || st.stintStart === null) return 0;
     return this.gameSeconds() - st.stintStart;
+  },
+
+  benchSecs(id) {
+    const st = this.S.game?.stats[id];
+    if (!st || st.benchStart == null) return 0;
+    return this.gameSeconds() - st.benchStart;
+  },
+
+  suggestSub() {
+    const g = this.S.game;
+    if (!g || !g.bench.length) return null;
+    const fieldCandidates = [...g.field].sort((a, b) => {
+      const tDiff = this.totalSecs(b) - this.totalSecs(a);
+      if (Math.abs(tDiff) > 30) return tDiff;
+      return (g.stats[a].benchCount||0) - (g.stats[b].benchCount||0);
+    });
+    const benchCandidates = [...g.bench].sort((a, b) => {
+      const bDiff = this.benchSecs(b) - this.benchSecs(a);
+      if (Math.abs(bDiff) > 30) return bDiff;
+      const bcDiff = (g.stats[b].benchCount||0) - (g.stats[a].benchCount||0);
+      if (bcDiff !== 0) return bcDiff;
+      return this.totalSecs(a) - this.totalSecs(b);
+    });
+    return { off: fieldCandidates[0], on: benchCandidates[0] };
+  },
+
+  showSuggest() {
+    const s = this.suggestSub();
+    if (!s) return;
+    const g = this.S.game;
+    const offP     = this.player(s.off);
+    const onP      = this.player(s.on);
+    const offTotal = this.mins(this.totalSecs(s.off));
+    const offStint = this.mins(this.stintSecs(s.off));
+    const offBc    = g.stats[s.off].benchCount || 0;
+    const onWait   = this.mins(this.benchSecs(s.on));
+    const onTotal  = this.mins(this.totalSecs(s.on));
+    const onBc     = g.stats[s.on].benchCount || 0;
+    this.modal(`
+      <div class="sheet-title">
+        <strong>&#128161; Sub Suggestion</strong>
+        <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
+      </div>
+      <div style="margin-bottom:18px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8595; Take off</div>
+        <div style="font-size:20px;font-weight:700;color:#e05252">${this.esc(offP.name)}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">${offTotal}m total &nbsp;·&nbsp; ${offStint}m this stint &nbsp;·&nbsp; ${offBc} bench sit${offBc===1?'':'s'}</div>
+      </div>
+      <div style="margin-bottom:22px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px">&#8593; Put on</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">${this.esc(onP.name)}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">${onWait}m waiting &nbsp;·&nbsp; ${onTotal}m total &nbsp;·&nbsp; ${onBc} bench sit${onBc===1?'':'s'}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="width:100%" onclick="this.closest('.sheet-bg').remove()">Dismiss</button>
+    `);
   },
 
   totalSecs(id) {
@@ -703,9 +796,8 @@ const App = {
     const g = this.S.game;
     if (!g) return;
 
-    document.getElementById('g-phase').textContent = g.half===1 ? '1ST HALF' : '2ND HALF';
     document.getElementById('g-half-lbl').textContent = `Half ${g.half}`;
-    document.getElementById('g-pause-btn').textContent = g.phase==='second_half' ? '🏁 End Game' : '⏸ End Half';
+    this.renderPauseControls();
 
     this.updateGameUI();
     this.renderPlayerGrids();
@@ -807,7 +899,10 @@ const App = {
       </div>
       <div class="divider"></div>
       <div class="zone" style="padding-bottom:12px">
-        <div class="zone-lbl">&#9201; Playing Time</div>
+        <div class="zone-lbl" style="justify-content:space-between;padding-right:4px">
+          <span>&#9201; Playing Time</span>
+          <button onclick="App.showSuggest()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:3px 10px;cursor:pointer;line-height:1.4">&#128161; Suggest</button>
+        </div>
         ${rankSorted.map(id => {
           const p = this.player(id);
           if (!p) return '';
@@ -817,7 +912,7 @@ const App = {
           return `<div class="rank-row">
             <div class="rank-name">${this.esc(p.name)}</div>
             <div class="rank-bar-bg"><div class="rank-bar" id="rank-bar-${id}" style="width:${pct}%"></div></div>
-            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:10px;color:var(--muted)">m</span>
+            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:13px;color:var(--muted)">m</span>
             <span class="rank-bench">&#129681;${bc}</span>
           </div>`;
         }).join('')}
@@ -936,7 +1031,9 @@ const App = {
       if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
       if (!fs.benchCount) fs.benchCount = 0;
       fs.benchCount++;
+      fs.benchStart = gs;
       g.stats[benchId].stintStart = gs;
+      g.stats[benchId].benchStart = null;
 
       g.subLog.push({ t, half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
       g.subCount++;
@@ -956,6 +1053,7 @@ const App = {
   // ── HALFTIME ───────────────────────────────────────────────
   halfOrEnd() {
     const g = this.S.game;
+    if (g.phase === 'paused') return;
     if (g.phase === 'second_half') { this.endGameReq(); return; }
     this.confirm('Go to half time?', ()=>this.goHalftime());
   },
@@ -1049,10 +1147,11 @@ const App = {
         if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
         if (!st.benchCount) st.benchCount = 0;
         st.benchCount++;
+        st.benchStart = gs;
       }
     });
     g.bench.forEach(id => {
-      if (lineup.includes(id)) g.stats[id].stintStart = gs;
+      if (lineup.includes(id)) { g.stats[id].stintStart = gs; g.stats[id].benchStart = null; }
     });
     g.field = allIds.filter(id => lineup.includes(id));
     g.bench = allIds.filter(id => !lineup.includes(id));
@@ -1060,6 +1159,7 @@ const App = {
     g.phase = 'second_half';
     g.half  = 2;
     g.halfStart = Date.now();
+    g.halfElapsed = 0;
     this.save();
     this.go('game');
     this.startTimer();
