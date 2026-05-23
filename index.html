@@ -274,10 +274,13 @@
     <div class="game-hdr">
       <div class="game-top">
         <div>
-          <div class="phase-lbl" id="g-phase">1ST HALF</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="phase-lbl" id="g-phase">1ST HALF</div>
+            <button id="g-game-pause-btn" onclick="App.togglePause()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;padding:2px 8px;cursor:pointer;line-height:1.5">&#9208; Pause</button>
+          </div>
           <div class="clock" id="g-clock">00:00</div>
         </div>
-        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">⏸ End Half</button>
+        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">&#9208; End Half</button>
       </div>
       <div class="game-meta">
         <span id="g-field-lbl">⚽ 7 on field</span>
@@ -671,18 +674,53 @@ const App = {
 
   stopTimer() { clearInterval(this.timer); this.timer = null; },
 
+  togglePause() {
+    const g = this.S.game;
+    if (!g) return;
+    if (g.phase === 'paused') {
+      g.halfStart = Date.now();
+      g.phase = g.prevPhase;
+      delete g.prevPhase;
+      this.startTimer();
+    } else {
+      const addSecs = Math.floor((Date.now() - g.halfStart) / 1000);
+      g.elapsed += addSecs;
+      g.halfElapsed = (g.halfElapsed || 0) + addSecs;
+      g.prevPhase = g.phase;
+      g.phase = 'paused';
+      this.stopTimer();
+      this.updateGameUI();
+    }
+    this.save();
+    this.renderPauseControls();
+  },
+
+  renderPauseControls() {
+    const g = this.S.game;
+    const paused = g.phase === 'paused';
+    const activePhase = paused ? g.prevPhase : g.phase;
+    const pauseBtn = document.getElementById('g-game-pause-btn');
+    const endBtn   = document.getElementById('g-pause-btn');
+    const phaseEl  = document.getElementById('g-phase');
+    if (pauseBtn) pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
+    if (endBtn)   { endBtn.disabled = paused; endBtn.style.opacity = paused ? '0.4' : '1'; endBtn.textContent = activePhase === 'second_half' ? '🏁 End Game' : '⏸ End Half'; }
+    if (phaseEl)  phaseEl.textContent = paused ? 'PAUSED' : (g.half === 1 ? '1ST HALF' : '2ND HALF');
+  },
+
   tick() { if (this.S.game) this.updateGameUI(); },
 
   gameSeconds() {
     const g = this.S.game;
     if (!g) return 0;
-    if (g.phase === 'halftime') return g.elapsed;
+    if (g.phase === 'halftime' || g.phase === 'paused') return g.elapsed;
     return g.elapsed + Math.floor((Date.now() - g.halfStart) / 1000);
   },
 
   halfSeconds() {
     const g = this.S.game;
-    return Math.floor((Date.now() - g.halfStart) / 1000);
+    const banked = g.halfElapsed || 0;
+    if (g.phase === 'paused') return banked;
+    return banked + Math.floor((Date.now() - g.halfStart) / 1000);
   },
 
   stintSecs(id) {
@@ -758,9 +796,8 @@ const App = {
     const g = this.S.game;
     if (!g) return;
 
-    document.getElementById('g-phase').textContent = g.half===1 ? '1ST HALF' : '2ND HALF';
     document.getElementById('g-half-lbl').textContent = `Half ${g.half}`;
-    document.getElementById('g-pause-btn').textContent = g.phase==='second_half' ? '🏁 End Game' : '⏸ End Half';
+    this.renderPauseControls();
 
     this.updateGameUI();
     this.renderPlayerGrids();
@@ -1016,6 +1053,7 @@ const App = {
   // ── HALFTIME ───────────────────────────────────────────────
   halfOrEnd() {
     const g = this.S.game;
+    if (g.phase === 'paused') return;
     if (g.phase === 'second_half') { this.endGameReq(); return; }
     this.confirm('Go to half time?', ()=>this.goHalftime());
   },
@@ -1121,6 +1159,7 @@ const App = {
     g.phase = 'second_half';
     g.half  = 2;
     g.halfStart = Date.now();
+    g.halfElapsed = 0;
     this.save();
     this.go('game');
     this.startTimer();
