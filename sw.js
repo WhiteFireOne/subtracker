@@ -1,4 +1,4 @@
-const CACHE = 'subtracker-v4';
+const CACHE = 'subtracker-v5';
 const FILES = ['./index.html', './', './app.html', './manifest.json', './lightning-qr.jpg', './bitcoin-qr.jpg'];
 
 self.addEventListener('install', e => {
