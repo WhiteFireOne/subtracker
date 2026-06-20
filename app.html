@@ -234,6 +234,56 @@
       </div>
       <div class="stack" id="home-btns"></div>
     </div>
+    <div style="text-align:center;padding:12px 16px 20px;flex-shrink:0">
+      <button onclick="document.getElementById('donate-modal').classList.add('open')"
+        style="background:rgba(255,171,0,0.10);border:1px solid rgba(255,171,0,0.25);color:#ffab00;font-size:13px;font-weight:600;padding:8px 20px;border-radius:100px;cursor:pointer;">
+        &#8383; Support with Bitcoin
+      </button>
+    </div>
+  </div>
+
+  <!-- DONATE MODAL -->
+  <div id="donate-modal" style="display:none;position:fixed;inset:0;z-index:999;align-items:flex-end;">
+    <div onclick="document.getElementById('donate-modal').classList.remove('open')"
+      style="position:absolute;inset:0;background:rgba(0,0,0,0.6)"></div>
+    <div style="position:relative;width:100%;background:#1a1a2e;border-radius:24px 24px 0 0;border-top:1px solid #2a2a4a;padding:20px 20px 36px;z-index:1;max-height:90vh;overflow-y:auto;">
+      <div style="width:40px;height:4px;background:#2a2a4a;border-radius:2px;margin:0 auto 20px;"></div>
+      <div style="text-align:center;font-weight:800;font-size:17px;margin-bottom:4px;">Support SubTracker</div>
+      <div style="text-align:center;font-size:13px;color:#7a7a9a;margin-bottom:20px;">Free forever — donate if it helps you!</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+
+        <div style="text-align:center;background:#0d0d14;border:1px solid #2a2a4a;border-radius:14px;padding:16px;width:152px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#ffab00;margin-bottom:10px;">⚡ Lightning</div>
+          <a href="lightning:muchember165@walletofsatoshi.com">
+            <img src="./lightning-qr.jpg" alt="Lightning QR" style="width:120px;height:120px;border-radius:6px;display:block;margin:0 auto 10px;">
+          </a>
+          <div id="ln-addr" onclick="copyAddr('ln-addr','muchember165@walletofsatoshi.com')"
+            style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;cursor:pointer;padding:4px;border-radius:4px;position:relative;">
+            muchember165@walletofsatoshi.com
+            <span style="opacity:0.5;font-size:10px;"> ⎘</span>
+            <span id="ln-toast" style="display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#00e676;color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;">Copied!</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;background:#0d0d14;border:1px solid #2a2a4a;border-radius:14px;padding:16px;width:152px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#ffab00;margin-bottom:10px;">&#8383; Bitcoin</div>
+          <a href="bitcoin:bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp">
+            <img src="./bitcoin-qr.jpg" alt="Bitcoin QR" style="width:120px;height:120px;border-radius:6px;display:block;margin:0 auto 10px;">
+          </a>
+          <div id="btc-addr" onclick="copyAddr('btc-addr','bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp')"
+            style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;cursor:pointer;padding:4px;border-radius:4px;position:relative;">
+            bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp
+            <span style="opacity:0.5;font-size:10px;"> ⎘</span>
+            <span id="btc-toast" style="display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#00e676;color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;">Copied!</span>
+          </div>
+        </div>
+
+      </div>
+      <button onclick="document.getElementById('donate-modal').classList.remove('open')"
+        style="display:block;width:100%;margin-top:20px;background:#0d0d14;border:1px solid #2a2a4a;color:#7a7a9a;font-size:15px;font-weight:600;padding:13px;border-radius:12px;cursor:pointer;">
+        Close
+      </button>
+    </div>
   </div>
 
   <!-- SQUAD -->
@@ -1373,6 +1423,19 @@ document.addEventListener('DOMContentLoaded', ()=>App.init());
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js');
+  });
+}
+</script>
+<style>
+  #donate-modal { display: none; }
+  #donate-modal.open { display: flex; }
+</style>
+<script>
+function copyAddr(id, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById(id).querySelector('span:last-child');
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 1800);
   });
 }
 </script>
