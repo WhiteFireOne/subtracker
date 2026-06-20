@@ -268,6 +268,43 @@
       line-height: 1.5;
     }
 
+    .copy-addr {
+      cursor: pointer;
+      position: relative;
+      padding: 6px 4px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .copy-addr:active { background: rgba(255,255,255,0.06); }
+
+    .copy-icon {
+      display: inline-block;
+      margin-left: 3px;
+      font-size: 11px;
+      opacity: 0.4;
+      vertical-align: middle;
+    }
+
+    .copy-toast {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .copy-addr.copied .copy-toast { display: block; }
+    .copy-addr.copied .copy-icon { opacity: 1; color: var(--green); }
+
     /* ── FOOTER ───────────────────────────────────────── */
     footer {
       text-align: center;
@@ -379,7 +416,11 @@
               <img src="./lightning-qr.jpg" alt="Lightning QR code">
             </div>
           </a>
-          <div class="donate-addr">muchember165@walletofsatoshi.com</div>
+          <div class="donate-addr copy-addr" data-copy="muchember165@walletofsatoshi.com" title="Tap to copy">
+            muchember165@walletofsatoshi.com
+            <span class="copy-icon">⎘</span>
+            <span class="copy-toast">Copied!</span>
+          </div>
         </div>
 
         <div class="donate-method">
@@ -389,12 +430,27 @@
               <img src="./bitcoin-qr.jpg" alt="Bitcoin QR code">
             </div>
           </a>
-          <div class="donate-addr">bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp</div>
+          <div class="donate-addr copy-addr" data-copy="bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp" title="Tap to copy">
+            bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp
+            <span class="copy-icon">⎘</span>
+            <span class="copy-toast">Copied!</span>
+          </div>
         </div>
 
       </div>
     </div>
   </section>
+
+  <script>
+    document.querySelectorAll('.copy-addr').forEach(el => {
+      el.addEventListener('click', () => {
+        navigator.clipboard.writeText(el.dataset.copy).then(() => {
+          el.classList.add('copied');
+          setTimeout(() => el.classList.remove('copied'), 1800);
+        });
+      });
+    });
+  </script>
 
   <!-- ── FOOTER ────────────────────────────────────────── -->
   <footer>
