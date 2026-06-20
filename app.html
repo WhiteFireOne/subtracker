@@ -324,13 +324,13 @@
     <div class="game-hdr">
       <div class="game-top">
         <div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="phase-lbl" id="g-phase">1ST HALF</div>
-            <button id="g-game-pause-btn" onclick="App.togglePause()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;padding:2px 8px;cursor:pointer;line-height:1.5">&#9208; Pause</button>
-          </div>
+          <div class="phase-lbl" id="g-phase">1ST HALF</div>
           <div class="clock" id="g-clock">00:00</div>
         </div>
-        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">&#9208; End Half</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="g-game-pause-btn" class="btn btn-ghost btn-sm" onclick="App.togglePause()">⏸ Pause</button>
+          <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">🛑 End Half</button>
+        </div>
       </div>
       <div class="game-meta">
         <span id="g-field-lbl">⚽ 7 on field</span>
@@ -753,7 +753,7 @@ const App = {
     const endBtn   = document.getElementById('g-pause-btn');
     const phaseEl  = document.getElementById('g-phase');
     if (pauseBtn) pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
-    if (endBtn)   { endBtn.disabled = paused; endBtn.style.opacity = paused ? '0.4' : '1'; endBtn.textContent = activePhase === 'second_half' ? '🏁 End Game' : '⏸ End Half'; }
+    if (endBtn)   { endBtn.disabled = paused; endBtn.style.opacity = paused ? '0.4' : '1'; endBtn.textContent = activePhase === 'second_half' ? '🏁 End Game' : '🛑 End Half'; }
     if (phaseEl)  phaseEl.textContent = paused ? 'PAUSED' : (g.half === 1 ? '1ST HALF' : '2ND HALF');
   },
 
