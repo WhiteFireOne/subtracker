@@ -257,12 +257,12 @@
           <a href="lightning:muchember165@walletofsatoshi.com">
             <img src="./lightning-qr.jpg" alt="Lightning QR" style="width:120px;height:120px;border-radius:6px;display:block;margin:0 auto 10px;">
           </a>
-          <div id="ln-addr" onclick="copyAddr('ln-addr','muchember165@walletofsatoshi.com')"
-            style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;cursor:pointer;padding:4px;border-radius:4px;position:relative;">
-            muchember165@walletofsatoshi.com
-            <span style="opacity:0.5;font-size:10px;"> ⎘</span>
-            <span id="ln-toast" style="display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#00e676;color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;">Copied!</span>
-          </div>
+          <div style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;margin-bottom:8px;">muchember165@walletofsatoshi.com</div>
+          <button id="ln-addr" onclick="copyAddr('ln-addr','muchember165@walletofsatoshi.com')"
+            style="display:block;width:100%;padding:9px;background:rgba(255,255,255,0.06);border:1px solid #2a2a4a;border-radius:10px;color:#e8e8f0;font-size:14px;font-weight:700;cursor:pointer;position:relative;">
+            <span id="ln-lbl">Copy</span>
+            <span id="ln-toast" style="display:none;position:absolute;inset:0;background:#00e676;color:#000;font-size:14px;font-weight:700;border-radius:9px;align-items:center;justify-content:center;">Copied!</span>
+          </button>
         </div>
 
         <div style="text-align:center;background:#0d0d14;border:1px solid #2a2a4a;border-radius:14px;padding:16px;width:152px;">
@@ -270,12 +270,12 @@
           <a href="bitcoin:bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp">
             <img src="./bitcoin-qr.jpg" alt="Bitcoin QR" style="width:120px;height:120px;border-radius:6px;display:block;margin:0 auto 10px;">
           </a>
-          <div id="btc-addr" onclick="copyAddr('btc-addr','bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp')"
-            style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;cursor:pointer;padding:4px;border-radius:4px;position:relative;">
-            bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp
-            <span style="opacity:0.5;font-size:10px;"> ⎘</span>
-            <span id="btc-toast" style="display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#00e676;color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;">Copied!</span>
-          </div>
+          <div style="font-size:9px;color:#7a7a9a;word-break:break-all;line-height:1.5;margin-bottom:8px;">bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp</div>
+          <button id="btc-addr" onclick="copyAddr('btc-addr','bc1pcnftek9u8l5at05j9ese58qrq3r7a6g9w0nhxdhp4u7l2wcrzn4qefwsjp')"
+            style="display:block;width:100%;padding:9px;background:rgba(255,255,255,0.06);border:1px solid #2a2a4a;border-radius:10px;color:#e8e8f0;font-size:14px;font-weight:700;cursor:pointer;position:relative;">
+            <span id="btc-lbl">Copy</span>
+            <span id="btc-toast" style="display:none;position:absolute;inset:0;background:#00e676;color:#000;font-size:14px;font-weight:700;border-radius:9px;align-items:center;justify-content:center;">Copied!</span>
+          </button>
         </div>
 
       </div>
@@ -1434,7 +1434,7 @@ if ('serviceWorker' in navigator) {
 function copyAddr(id, text) {
   navigator.clipboard.writeText(text).then(() => {
     const toast = document.getElementById(id).querySelector('span:last-child');
-    toast.style.display = 'block';
+    toast.style.display = 'flex';
     setTimeout(() => toast.style.display = 'none', 1800);
   });
 }
