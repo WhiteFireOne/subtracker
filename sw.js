@@ -1,5 +1,5 @@
-const CACHE = 'subtracker-v3';
-const FILES = ['./index.html', './', './app.html', './manifest.json', './lightning-qr.jpg'];
+const CACHE = 'subtracker-v4';
+const FILES = ['./index.html', './', './app.html', './manifest.json', './lightning-qr.jpg', './bitcoin-qr.jpg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
