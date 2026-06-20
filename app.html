@@ -242,6 +242,10 @@
         <div style="font-size:12px;color:#7a7a9a;">Tap here for one-tap access — works offline too</div>
       </div>
 
+      <button onclick="document.getElementById('install-modal').classList.add('open')"
+        style="background:rgba(0,230,118,0.10);border:1px solid rgba(0,230,118,0.25);color:#00e676;font-size:13px;font-weight:600;padding:8px 20px;border-radius:100px;cursor:pointer;">
+        📲 Install Guide
+      </button>
       <button onclick="document.getElementById('donate-modal').classList.add('open')"
         style="background:rgba(255,171,0,0.10);border:1px solid rgba(255,171,0,0.25);color:#ffab00;font-size:13px;font-weight:600;padding:8px 20px;border-radius:100px;cursor:pointer;">
         Say Thanks &#8383;
@@ -250,7 +254,7 @@
   </div>
 
   <!-- INSTALL MODAL -->
-  <div id="install-modal" style="display:none;position:fixed;inset:0;z-index:999;align-items:flex-end;">
+  <div id="install-modal" style="position:fixed;inset:0;z-index:999;align-items:flex-end;">
     <div onclick="document.getElementById('install-modal').classList.remove('open')"
       style="position:absolute;inset:0;background:rgba(0,0,0,0.6)"></div>
     <div style="position:relative;width:100%;background:#1a1a2e;border-radius:24px 24px 0 0;border-top:1px solid #2a2a4a;padding:20px 20px 36px;z-index:1;">
