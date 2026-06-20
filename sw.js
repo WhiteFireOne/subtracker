@@ -1,5 +1,5 @@
-const CACHE = 'subtracker-v1';
-const FILES = ['./index.html', './'];
+const CACHE = 'subtracker-v2';
+const FILES = ['./index.html', './', './app.html', './manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

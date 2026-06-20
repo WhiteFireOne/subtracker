@@ -2,1379 +2,397 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0d0d14">
-  <title>SubTracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SubTracker — Substitution Manager for Football Coaches</title>
+  <meta name="description" content="Free pitch-side substitution manager. Track player minutes, manage subs fairly, score tracking, game history. Installs on your phone, works offline.">
   <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAFOklEQVR42u3dS25bQQxE0R54FMCzrDVLzjqcDQSQnppkFesCHCY203XQit6Hfb6/f1PU4zosAQUgCkAUgCgAURSAKABRAKIARFEAogBEAch3gf7+YREA9F8ctwpAcLlcAAINmFIBibhJkHRwg6R0QEZu9kk60IFRIqA1dNwZHejAKAXQejqOjA50YLQZUCwdF0YHPRhaCAgxLowOejC0BxA+7Bgd9GBoAyBAmBo60IGRMaBbi/j19etfGaV+t+FQQHfDMDJU0XAcoIowLAzVNRwEqCgJcUYNDUcAaghD0FBbw8sBtYWhw6i/27WAmsNQMDTV8EJAU2EMGppteBWgwSRGGIk0vASQSBhthqQatgckFUaDIcGGjQGpJVHKSLnhOEDVYVw3JN6wJSDxMG4xcunWDJBFGJ+n4tWwDSCvMB5HYtdwhSEJQLNJPEjFrmEnQI7bjykghU3oZP7H+fM8fAHdNQQgAMkA8vo+7A5I5PL02XGznW9hU4YABCABQF43BBYA0nkOH0BBV6JFAdndkgTQRUMAAtAoILunatzvxlc8yQQgAHkCcnkkFEB1huQANUeS2bAEIK/n0gFUZAhAAJoA5PVqFQ/V1xkCEIAABCAvQF6vl/NiYakhAL3UA4AA9HYeH/55AM2PdZ7K4/rfMhpM866hUECf/FK1hgEklEfPX88F5DUl7q08pn6I5ny+PYDEmXL+Rjog0x0CQHv0rDRUAgg9GALQqgs2ANqmZ5MhAE0++QWgbYDc394CUJwed0OXAUEnkFE6IJ1RmKaGogFJ6TE1FApIkI4pI0tAn6/yYkDNBP0AWY9c6RwlA6CXUt9nSGR9tgFaNv6y898CoJID1dcA0n9b/hiNAor6Gu8yNOh4TSILAWQ0uWwGUNSJTJ2diwISvMq38laG4wzX1h1o9t1kcUCC17uFPsJGUjEC5HuiTwegwWz09bifNl8OaDYhcUALzqUrBKSQkywgi4vgk4CSo5JtyQaQVGBqgIyuhg8AEvzWQyePGeUCkn0rA0AehgB05VMMQAAC0KUFCu9kHpCRIQC16QEQgACkelvDa3HkhisE3rbUv8XrNJ0DQADaBkhnwFQoIH1DRhPKdugBEIAApPekve/iyA0aX/bSjO+LRyqT6pU3IUZg9W8/AAKQ/Hlh6LFbHK0zUwHktThyh+5aA2r7+QASfbHwYrqmhko/vx4CUtuEOkPdDeiJBAC92y2AugEdn+OMlX+p4OfXc0A6m9BgissAPWQAoDN9anMoIAVDIuFpGmrQ0wpo93W8kPMJLwPiFLodhj4CEAiImypCgOwMcWPuop44QDxbogjIwpDFRDA7PSmAjE5XCQUka8jxmBUjPQACkAwgTUMAKtVzGZCgIQCV6tkPyGsiGIDYhLK2nxJAaoYAVKcnAhDXgfwAsQmFbD+FgKQMAahITy0gDK3XAyAAaQPSMZQMqDbfakCxhhL0NAESMRQIqCPZHkAKhtIANcXaBijKUIiebkDjhkIAtQbaDGjWUAKg7jT7Aa03lKNnDNCgocWAZnKcAjRlaCugsRAHAa00FKVnHtCIoWWAhuMbB9TPaA0gieBEAO0wlKZHC1CnIXdAQpFJAWpj5AtILixBQAuG54Xo0QUEI306BoAwJK7HAFA4I4NoLAAFMrIJxQhQCCOzOOwALWZkGYQpoGWMjCOwBrSAkf3iLwDkKGnPmm8CpC9p4VKvBKQmafMK7wY0iCllVXMAlZLKXcNkQC8iYxEARAGIAhAFIIoCEAUgCkAUgCgAsQQUgCgAUZ71A2ROPqV1tAD9AAAAAElFTkSuQmCC">
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAFOklEQVR42u3dS25bQQxE0R54FMCzrDVLzjqcDQSQnppkFesCHCY203XQit6Hfb6/f1PU4zosAQUgCkAUgCgAURSAKABRAKIARFEAogBEAch3gf7+YREA9F8ctwpAcLlcAAINmFIBibhJkHRwg6R0QEZu9kk60IFRIqA1dNwZHejAKAXQejqOjA50YLQZUCwdF0YHPRhaCAgxLowOejC0BxA+7Bgd9GBoAyBAmBo60IGRMaBbi/j19etfGaV+t+FQQHfDMDJU0XAcoIowLAzVNRwEqCgJcUYNDUcAaghD0FBbw8sBtYWhw6i/27WAmsNQMDTV8EJAU2EMGppteBWgwSRGGIk0vASQSBhthqQatgckFUaDIcGGjQGpJVHKSLnhOEDVYVw3JN6wJSDxMG4xcunWDJBFGJ+n4tWwDSCvMB5HYtdwhSEJQLNJPEjFrmEnQI7bjykghU3oZP7H+fM8fAHdNQQgAMkA8vo+7A5I5PL02XGznW9hU4YABCABQF43BBYA0nkOH0BBV6JFAdndkgTQRUMAAtAoILunatzvxlc8yQQgAHkCcnkkFEB1huQANUeS2bAEIK/n0gFUZAhAAJoA5PVqFQ/V1xkCEIAABCAvQF6vl/NiYakhAL3UA4AA9HYeH/55AM2PdZ7K4/rfMhpM866hUECf/FK1hgEklEfPX88F5DUl7q08pn6I5ny+PYDEmXL+Rjog0x0CQHv0rDRUAgg9GALQqgs2ANqmZ5MhAE0++QWgbYDc394CUJwed0OXAUEnkFE6IJ1RmKaGogFJ6TE1FApIkI4pI0tAn6/yYkDNBP0AWY9c6RwlA6CXUt9nSGR9tgFaNv6y898CoJID1dcA0n9b/hiNAor6Gu8yNOh4TSILAWQ0uWwGUNSJTJ2diwISvMq38laG4wzX1h1o9t1kcUCC17uFPsJGUjEC5HuiTwegwWz09bifNl8OaDYhcUALzqUrBKSQkywgi4vgk4CSo5JtyQaQVGBqgIyuhg8AEvzWQyePGeUCkn0rA0AehgB05VMMQAAC0KUFCu9kHpCRIQC16QEQgACkelvDa3HkhisE3rbUv8XrNJ0DQADaBkhnwFQoIH1DRhPKdugBEIAApPekve/iyA0aX/bSjO+LRyqT6pU3IUZg9W8/AAKQ/Hlh6LFbHK0zUwHktThyh+5aA2r7+QASfbHwYrqmhko/vx4CUtuEOkPdDeiJBAC92y2AugEdn+OMlX+p4OfXc0A6m9BgissAPWQAoDN9anMoIAVDIuFpGmrQ0wpo93W8kPMJLwPiFLodhj4CEAiImypCgOwMcWPuop44QDxbogjIwpDFRDA7PSmAjE5XCQUka8jxmBUjPQACkAwgTUMAKtVzGZCgIQCV6tkPyGsiGIDYhLK2nxJAaoYAVKcnAhDXgfwAsQmFbD+FgKQMAahITy0gDK3XAyAAaQPSMZQMqDbfakCxhhL0NAESMRQIqCPZHkAKhtIANcXaBijKUIiebkDjhkIAtQbaDGjWUAKg7jT7Aa03lKNnDNCgocWAZnKcAjRlaCugsRAHAa00FKVnHtCIoWWAhuMbB9TPaA0gieBEAO0wlKZHC1CnIXdAQpFJAWpj5AtILixBQAuG54Xo0QUEI306BoAwJK7HAFA4I4NoLAAFMrIJxQhQCCOzOOwALWZkGYQpoGWMjCOwBrSAkf3iLwDkKGnPmm8CpC9p4VKvBKQmafMK7wY0iCllVXMAlZLKXcNkQC8iYxEARAGIAhAFIIoCEAUgCkAUgCgAsQQUgCgAUZ71A2ROPqV1tAD9AAAAAElFTkSuQmCC">
+  <meta name="theme-color" content="#0d0d14">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d14;
+      --bg:      #0d0d14;
       --surface: #1a1a2e;
-      --surface2: #16213e;
-      --border: #2a2a4a;
-      --text: #e8e8f0;
-      --muted: #7a7a9a;
-      --green: #00e676;
-      --green-dim: rgba(0,230,118,0.12);
-      --amber: #ffab00;
-      --amber-dim: rgba(255,171,0,0.12);
-      --red: #ff5252;
-      --red-dim: rgba(255,82,82,0.12);
-      --purple: #7c4dff;
-      --purple-dim: rgba(124,77,255,0.12);
+      --border:  #2a2a4a;
+      --text:    #e8e8f0;
+      --muted:   #7a7a9a;
+      --green:   #00e676;
+      --amber:   #ffab00;
     }
 
-    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
 
-    #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
 
-    .screen { display: none; flex-direction: column; height: 100dvh; overflow: hidden; }
-    .screen.active { display: flex; }
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 52px;
+    }
 
-    /* Header */
-    .hdr { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .hdr h1 { flex: 1; font-size: 18px; font-weight: 700; }
-    .hdr .sub { font-size: 13px; color: var(--muted); }
-    .back { background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; padding: 0 4px 0 0; line-height: 1; }
+    .hero-icon { font-size: 60px; margin-bottom: 14px; line-height: 1; }
 
-    /* Scroll content */
-    .body { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+    .badge {
+      display: inline-block;
+      background: rgba(0,230,118,0.10);
+      color: var(--green);
+      border: 1px solid rgba(0,230,118,0.22);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      padding: 4px 14px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
 
-    /* Buttons */
-    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; border: none; border-radius: 14px; padding: 15px 20px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: transform 0.1s, opacity 0.1s; }
-    .btn:active { transform: scale(0.97); opacity: 0.85; }
-    .btn-green  { background: var(--green); color: #000; }
-    .btn-ghost  { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    .btn-red    { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,82,82,0.25); }
-    .btn-purple { background: var(--purple); color: #fff; }
-    .btn-amber  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,171,0,0.25); }
-    .btn-sm     { padding: 10px 18px; font-size: 14px; width: auto; border-radius: 10px; }
-    .btn-icon   { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; color: var(--text); cursor: pointer; font-size: 18px; line-height: 1; }
+    .hero h1 {
+      font-size: clamp(40px, 10vw, 64px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
 
-    /* Cards */
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+    .hero h1 span { color: var(--green); }
 
-    /* Form */
-    .label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
-    .input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; color: var(--text); font-size: 16px; }
-    .input:focus { outline: none; border-color: var(--green); }
+    .hero p {
+      font-size: clamp(16px, 3vw, 19px);
+      color: var(--muted);
+      max-width: 440px;
+      margin: 0 auto 36px;
+    }
 
-    .num-ctrl { display: flex; align-items: center; gap: 16px; }
-    .num-ctrl button { width: 46px; height: 46px; border-radius: 12px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .num-ctrl .val { font-size: 24px; font-weight: 800; min-width: 44px; text-align: center; }
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-    /* Stack */
-    .stack { display: flex; flex-direction: column; gap: 10px; }
-    .row   { display: flex; gap: 10px; }
+    .btn-primary {
+      background: var(--green);
+      color: #000;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 15px 32px;
+      border-radius: 14px;
+      display: inline-block;
+      letter-spacing: 0.2px;
+    }
 
-    /* Section title */
-    .sec { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 10px; }
-    .mt12 { margin-top: 12px; }
-    .mt16 { margin-top: 16px; }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 16px;
+      padding: 15px 32px;
+      border-radius: 14px;
+      display: inline-block;
+      border: 1px solid var(--border);
+    }
 
-    /* Empty */
-    .empty { text-align: center; color: var(--muted); padding: 48px 0; }
-    .empty big { font-size: 48px; display: block; margin-bottom: 12px; }
+    /* ── SECTION WRAPPER ──────────────────────────────── */
+    section {
+      padding: 52px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
-    /* Toast */
-    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 22px; font-size: 14px; font-weight: 500; opacity: 0; transition: opacity 0.25s; z-index: 200; white-space: nowrap; pointer-events: none; }
-    .toast.on { opacity: 1; }
+    section h2 {
+      font-size: clamp(22px, 4vw, 28px);
+      font-weight: 800;
+      margin-bottom: 28px;
+      text-align: center;
+    }
 
-    /* Modal sheet */
-    .sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: flex; flex-direction: column; }
-    .sheet { background: var(--surface); margin-top: auto; border-radius: 20px 20px 0 0; padding: 20px; max-height: 65vh; overflow-y: auto; }
-    .sheet-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .sheet-title strong { font-size: 17px; }
-    .sheet-close { background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+    hr { border: none; border-top: 1px solid var(--border); }
 
-    /* ===== HOME ===== */
-    .hero { text-align: center; padding: 32px 0 28px; }
-    .hero big { font-size: 72px; display: block; }
-    .hero h2 { font-size: 30px; font-weight: 800; margin-top: 8px; }
-    .hero p { color: var(--muted); margin-top: 6px; font-size: 15px; }
+    /* ── FEATURES ─────────────────────────────────────── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
 
-    /* ===== SQUAD ===== */
-    .player-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; }
-    .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; color: var(--green); flex-shrink: 0; }
-    .player-name { flex: 1; font-size: 16px; font-weight: 500; }
-    .del { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
-    .add-row { display: flex; gap: 10px; margin-bottom: 14px; }
-    .add-row .input { flex: 1; }
-    .add-row .btn { width: auto; padding: 13px 20px; }
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
 
-    /* ===== PRE-GAME ===== */
-    .steps { display: flex; gap: 6px; padding: 10px 16px; flex-shrink: 0; }
-    .step { height: 4px; flex: 1; border-radius: 2px; background: var(--border); transition: background 0.3s; }
-    .step.done { background: rgba(0,230,118,0.35); }
-    .step.active { background: var(--green); }
+    .feature-icon { font-size: 28px; margin-bottom: 10px; line-height: 1; }
 
-    .att-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; cursor: pointer; transition: opacity 0.2s; }
-    .att-item.away { opacity: 0.38; }
-    .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-    .att-item:not(.away) .check { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+    .feature h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
 
-    .lu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .lu-card { padding: 14px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface2); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s; }
-    .lu-card.field { background: var(--green-dim); border-color: var(--green); }
-    .lu-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-    .lu-card.field .lu-dot { background: var(--green); }
-    .lu-name { font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .feature p { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-    /* ===== GAME ===== */
-    .game-hdr { background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; padding: 10px 16px 8px; }
-    .game-top { display: flex; align-items: center; justify-content: space-between; }
-    .phase-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-    .clock { font-size: 40px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); line-height: 1; }
-    .game-meta { display: flex; gap: 18px; margin-top: 6px; font-size: 12px; color: var(--muted); }
-    .game-meta span { display: flex; align-items: center; gap: 4px; }
+    /* ── INSTALL ──────────────────────────────────────── */
+    .install-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
 
-    .game-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .zone { padding: 12px 12px 0; }
-    .zone-lbl { display: flex; align-items: center; gap: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
-    .zone-badge { background: var(--surface); border-radius: 6px; padding: 2px 7px; font-size: 11px; color: var(--text); }
-    .divider { height: 1px; background: var(--border); margin: 4px 12px 0; }
+    @media (max-width: 500px) { .install-grid { grid-template-columns: 1fr; } }
 
-    .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .install-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+    }
 
-    .pc { border-radius: 14px; padding: 11px 8px 10px; text-align: center; border: 2px solid var(--border); background: var(--surface2); cursor: pointer; transition: all 0.15s; position: relative; user-select: none; -webkit-user-select: none; }
-    .pc.field   { border-color: var(--green); background: var(--green-dim); }
-    .pc.warn    { border-color: var(--amber); background: var(--amber-dim); }
-    .pc.over    { border-color: var(--red);   background: var(--red-dim); }
-    .pc.bench   { border-color: var(--border); background: var(--surface); }
-    .pc.sel-off { box-shadow: 0 0 0 3px var(--red);    border-color: var(--red) !important;    background: var(--red-dim) !important;             transform: scale(1.05); }
-    .pc.sel-on  { box-shadow: 0 0 0 3px var(--green);  border-color: var(--green) !important;  background: rgba(0,230,118,0.28) !important;        transform: scale(1.05); }
+    .install-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
 
-    .pc-dot { width: 7px; height: 7px; border-radius: 50%; position: absolute; top: 8px; right: 8px; }
-    .pc.field .pc-dot { background: var(--green); }
-    .pc.warn  .pc-dot { background: var(--amber); }
-    .pc.over  .pc-dot { background: var(--red); }
-    .pc.bench .pc-dot { background: #444; }
+    .install-steps { list-style: none; counter-reset: steps; }
 
-    .pc-name  { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-    .pc-time  { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 2px; }
-    .pc-total { font-size: 10px; color: var(--muted); }
+    .install-steps li {
+      counter-increment: steps;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 11px;
+      font-size: 14px;
+      color: var(--muted);
+      align-items: flex-start;
+    }
 
-    .hint-bar { padding: 0 12px 8px; }
-    .hint { background: var(--purple-dim); border: 1px solid rgba(124,77,255,0.25); border-radius: 10px; padding: 9px 14px; font-size: 13px; color: var(--purple); text-align: center; }
+    .install-steps li:last-child { margin-bottom: 0; }
 
-    .score-bar { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-    .score-side { flex: 1; display: flex; align-items: center; gap: 6px; }
-    .score-side.right { flex-direction: row-reverse; }
-    .score-btn-main { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 7px 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.1s, opacity 0.1s; }
-    .score-btn-main:active { transform: scale(0.96); opacity: 0.8; }
-    .score-num { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); line-height: 1; }
-    .score-team-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
-    .score-undo { background: none; border: none; color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 6px 2px; flex-shrink: 0; }
-    .score-div { font-size: 20px; font-weight: 800; color: var(--muted); flex-shrink: 0; }
+    .install-steps li::before {
+      content: counter(steps);
+      background: rgba(0,230,118,0.13);
+      color: var(--green);
+      font-weight: 700;
+      font-size: 11px;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
 
-    .game-footer { display: flex; gap: 8px; padding: 10px 12px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+    .install-steps strong { color: var(--text); font-weight: 600; }
 
-    /* ===== RANKING ===== */
-    .rank-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-    .rank-name { font-size: 12px; font-weight: 600; min-width: 54px; max-width: 54px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .rank-bar-bg { flex: 0 1 35%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-    .rank-bar { height: 100%; border-radius: 3px; background: var(--green); transition: width 0.9s ease; }
-    .rank-mins { font-size: 16px; font-weight: 700; color: var(--green); min-width: 26px; text-align: right; }
-    .rank-bench { font-size: 15px; color: var(--muted); min-width: 32px; text-align: right; white-space: nowrap; }
+    /* ── DONATE ───────────────────────────────────────── */
+    .donate-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+    }
 
-    /* ===== HALFTIME ===== */
-    .ht-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
-    .ht-name { flex: 1; font-weight: 500; font-size: 15px; }
-    .ht-bar-bg { width: 70px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
-    .ht-bar { height: 100%; border-radius: 3px; background: var(--green); }
-    .ht-mins { font-size: 22px; font-weight: 800; color: var(--green); min-width: 28px; text-align: right; }
-    .ht-unit { font-size: 11px; color: var(--muted); }
+    .donate-card > p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 420px;
+      margin: 0 auto 28px;
+    }
 
-    /* ===== POST-GAME ===== */
-    .pg-hero { text-align: center; padding: 24px 0 16px; }
-    .pg-hero big { font-size: 56px; display: block; }
-    .pg-hero h2 { font-size: 24px; font-weight: 800; margin-top: 8px; }
-    .pg-hero p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .donate-methods {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 8px; text-align: center; }
-    .stat-val { font-size: 28px; font-weight: 800; color: var(--green); }
-    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .donate-method {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 20px;
+      width: 172px;
+    }
 
-    /* Sub log items */
-    .log-item { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface2); border-radius: 10px; margin-bottom: 6px; font-size: 13px; }
-    .log-time { color: var(--green); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 38px; }
-    .log-half { color: var(--muted); font-size: 11px; }
-    .log-on  { color: var(--green); }
-    .log-off { color: var(--red); }
-    .log-dot { color: var(--muted); }
+    .donate-method h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 14px;
+    }
 
-    /* ===== HISTORY ===== */
-    .hist-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; cursor: pointer; }
-    .hist-icon { font-size: 28px; }
-    .hist-info { flex: 1; }
-    .hist-date { font-weight: 600; font-size: 15px; }
-    .hist-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
-    .hist-arr { color: var(--muted); font-size: 20px; }
+    /* QR placeholder — replace src with real QR image once wallet is set up */
+    .qr-wrap {
+      width: 132px;
+      height: 132px;
+      background: #fff;
+      border-radius: 8px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .qr-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Shown when no real QR yet */
+    .qr-soon {
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .donate-addr {
+      font-size: 10px;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 32px 24px 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer a { color: var(--green); }
+
+    footer p + p { margin-top: 6px; }
   </style>
 </head>
 <body>
-<div id="app">
 
-  <div id="toast" class="toast"></div>
-
-  <!-- HOME -->
-  <div id="s-home" class="screen active">
-    <div class="body">
-      <div class="hero">
-        <big>⚽</big>
-        <h2>SubTracker</h2>
-        <p>Substitution manager for coaches</p>
-      </div>
-      <div class="stack" id="home-btns"></div>
+  <!-- ── HERO ──────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-icon">⚽</div>
+    <div class="badge">Free &middot; No account &middot; Works offline</div>
+    <h1>Sub<span>Tracker</span></h1>
+    <p>Pitch-side substitution manager for football coaches. Fair game time for every player.</p>
+    <div class="hero-btns">
+      <a href="./app.html" class="btn-primary">Open App</a>
+      <a href="#install" class="btn-secondary">How to Install</a>
     </div>
   </div>
 
-  <!-- SQUAD -->
-  <div id="s-squad" class="screen">
-    <div class="hdr">
-      <button class="back" onclick="App.go('home')">‹</button>
-      <h1>Squad</h1>
-      <span class="sub" id="squad-sub"></span>
-    </div>
-    <div class="body">
-      <div style="margin-bottom:14px">
-        <div class="label">Team Name</div>
-        <input id="team-name-input" class="input" type="text" placeholder="e.g. Thunder FC" autocomplete="off"
-               oninput="App.saveTeamName(this.value)">
-      </div>
-      <div class="label">Players</div>
-      <div class="add-row">
-        <input id="new-player" class="input" type="text" placeholder="Player name" autocomplete="off"
-               onkeydown="if(event.key==='Enter')App.addPlayer()">
-        <button class="btn btn-green btn-sm" onclick="App.addPlayer()">Add</button>
-      </div>
-      <div id="squad-list"></div>
-    </div>
-  </div>
+  <hr>
 
-  <!-- PRE-GAME -->
-  <div id="s-pregame" class="screen">
-    <div class="hdr">
-      <button class="back" id="pg-back">‹</button>
-      <h1 id="pg-title">Game Setup</h1>
+  <!-- ── FEATURES ──────────────────────────────────────── -->
+  <section>
+    <h2>Everything you need on the pitch</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">⏱</div>
+        <h3>Live Game Clock</h3>
+        <p>Half-by-half timer with pause and resume. Never lose track of time.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔄</div>
+        <h3>Smart Sub Suggestions</h3>
+        <p>Highlights which players need more time so every substitution is fair.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Player Minutes</h3>
+        <p>Tracks exact minutes per player across each half and the full game.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚽</div>
+        <h3>Score Tracking</h3>
+        <p>Tap to keep score for both teams throughout the match.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🏆</div>
+        <h3>Game History</h3>
+        <p>Save and review past games — final score, minutes played, every sub logged.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📱</div>
+        <h3>Works Offline</h3>
+        <p>Installs on your phone like a native app. No internet needed on the pitch.</p>
+      </div>
     </div>
-    <div class="steps" id="pg-steps"></div>
-    <div class="body" id="pg-body"></div>
-  </div>
+  </section>
 
-  <!-- GAME -->
-  <div id="s-game" class="screen">
-    <div class="game-hdr">
-      <div class="game-top">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="phase-lbl" id="g-phase">1ST HALF</div>
-            <button id="g-game-pause-btn" onclick="App.togglePause()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;padding:2px 8px;cursor:pointer;line-height:1.5">&#9208; Pause</button>
+  <hr>
+
+  <!-- ── INSTALL ───────────────────────────────────────── -->
+  <section id="install">
+    <h2>Install on your phone</h2>
+    <div class="install-grid">
+      <div class="install-card">
+        <h3>🍎 iPhone &amp; iPad</h3>
+        <ol class="install-steps">
+          <li>Open <a href="./app.html" style="color:var(--green)">the app</a> in <strong>Safari</strong></li>
+          <li>Tap the <strong>Share</strong> button (box with arrow up)</li>
+          <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+          <li>Tap <strong>Add</strong> — done!</li>
+        </ol>
+      </div>
+      <div class="install-card">
+        <h3>🤖 Android</h3>
+        <ol class="install-steps">
+          <li>Open <a href="./app.html" style="color:var(--green)">the app</a> in <strong>Chrome</strong></li>
+          <li>Tap the <strong>menu</strong> (&#8942; top right)</li>
+          <li>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong></li>
+          <li>Tap <strong>Install</strong> — done!</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── DONATE ────────────────────────────────────────── -->
+  <section id="donate">
+    <h2>Support the project</h2>
+    <div class="donate-card">
+      <p>SubTracker is free and always will be. If it saves you headaches on the pitch, a small Bitcoin donation keeps development going.</p>
+      <div class="donate-methods">
+
+        <div class="donate-method">
+          <h4>⚡ Lightning</h4>
+          <!-- REPLACE: swap the qr-soon div with an <img> tag once you have your Lightning address.
+               Generate a QR at https://qr.io or similar, save as lightning-qr.png in this folder.
+               Then replace the qr-soon div with: <img src="./lightning-qr.png" alt="Lightning QR"> -->
+          <div class="qr-wrap">
+            <div class="qr-soon">Lightning address<br>coming soon</div>
           </div>
-          <div class="clock" id="g-clock">00:00</div>
+          <!-- REPLACE: put your Lightning address here e.g. you@phoenix.app -->
+          <div class="donate-addr">Lightning address coming soon</div>
         </div>
-        <button class="btn btn-amber btn-sm" id="g-pause-btn" onclick="App.halfOrEnd()">&#9208; End Half</button>
-      </div>
-      <div class="game-meta">
-        <span id="g-field-lbl">⚽ 7 on field</span>
-        <span id="g-sub-lbl">🔄 0 subs</span>
-        <span id="g-half-lbl">Half 1</span>
-      </div>
-      <div class="score-bar" id="g-score"></div>
-    </div>
-    <div class="game-body" id="g-body"></div>
-    <div class="hint-bar" id="g-hint"></div>
-    <div class="game-footer" id="g-footer"></div>
-  </div>
 
-  <!-- HALFTIME -->
-  <div id="s-halftime" class="screen">
-    <div class="hdr"><h1>Half Time ⏸</h1></div>
-    <div class="body">
-      <div class="card" style="text-align:center;margin-bottom:16px">
-        <div class="sec" style="margin-bottom:4px">First Half</div>
-        <div style="font-size:36px;font-weight:800;color:var(--green)" id="ht-clock">20:00</div>
-        <div style="font-size:22px;font-weight:800;margin-top:6px" id="ht-score">0 — 0</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="ht-score-lbl"></div>
-      </div>
-      <div class="sec">Minutes Played</div>
-      <div id="ht-stats"></div>
-      <div class="sec mt16">&#9917; 2nd Half Starting Lineup</div>
-      <div id="ht-lineup"></div>
-      <div class="mt16">
-        <button class="btn btn-ghost" id="ht-start-btn" onclick="App.resumeGame()" style="opacity:0.5" disabled>&#9654; Start 2nd Half</button>
-      </div>
-      <div class="sec mt16">Substitutions</div>
-      <div id="ht-log"></div>
-    </div>
-  </div>
-
-  <!-- POST-GAME -->
-  <div id="s-postgame" class="screen">
-    <div class="body">
-      <div class="pg-hero">
-        <big>🏆</big>
-        <h2>Full Time!</h2>
-        <div style="font-size:36px;font-weight:800;margin:6px 0 2px" id="pg-score">0 — 0</div>
-        <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-bottom:4px" id="pg-score-lbl"></div>
-        <p id="pg-date"></p>
-      </div>
-      <div class="stat-row" id="pg-stats"></div>
-      <div class="sec">Player Minutes</div>
-      <div id="pg-players"></div>
-      <div class="sec mt16">Substitutions</div>
-      <div id="pg-log"></div>
-      <div class="stack mt16">
-        <button class="btn btn-green"   onclick="App.saveGame()">Save Game</button>
-        <button class="btn btn-ghost"   onclick="App.go('home')">Home</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- HISTORY -->
-  <div id="s-history" class="screen">
-    <div class="hdr">
-      <button class="back" onclick="App.go('home')">‹</button>
-      <h1>History</h1>
-    </div>
-    <div class="body" id="hist-body"></div>
-  </div>
-
-</div>
-<script>
-const App = {
-
-  // ── State ──────────────────────────────────────────────────
-  S: {
-    squad: [],
-    defaults: { halfLen: 20, halves: 2, fieldN: 7, alertMin: 15, teamName: '' },
-    game: null,
-    history: [],
-    // transient
-    pg: null,        // pregame wizard data
-    pgStep: 0,
-    selOff: [],      // field players coming off
-    selOn:  [],      // bench players going on
-  },
-
-  timer: null,
-
-  // ── Persistence ────────────────────────────────────────────
-  save() {
-    localStorage.setItem('st2', JSON.stringify({
-      squad:    this.S.squad,
-      defaults: this.S.defaults,
-      history:  this.S.history,
-      game:     this.S.game,
-    }));
-  },
-
-  load() {
-    try {
-      const d = JSON.parse(localStorage.getItem('st2') || '{}');
-      if (d.squad)    this.S.squad    = d.squad;
-      if (d.defaults) this.S.defaults = { ...this.S.defaults, ...d.defaults };
-      if (d.history)  this.S.history  = d.history;
-      if (d.game)     this.S.game     = d.game;
-    } catch(e) {}
-  },
-
-  // ── Utils ──────────────────────────────────────────────────
-  uid()   { return Date.now().toString(36) + Math.random().toString(36).slice(2); },
-  fmt(s)  { const m=Math.floor(Math.abs(s)/60),sec=Math.floor(Math.abs(s)%60); return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`; },
-  mins(s) { return Math.floor(s/60); },
-  esc(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
-  player(id) { return this.S.squad.find(p=>p.id===id); },
-
-  toast(msg, ms=2200) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('on');
-    clearTimeout(this._toastT);
-    this._toastT = setTimeout(()=>el.classList.remove('on'), ms);
-  },
-
-  modal(html) {
-    const bg = document.createElement('div');
-    bg.className = 'sheet-bg';
-    bg.innerHTML = `<div class="sheet">${html}</div>`;
-    bg.addEventListener('click', e => { if(e.target===bg) bg.remove(); });
-    document.body.appendChild(bg);
-    return bg;
-  },
-
-  confirm(msg, cb) {
-    const m = this.modal(`
-      <div class="sheet-title"><strong>Confirm</strong><button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">✕</button></div>
-      <p style="color:var(--muted);margin-bottom:20px;font-size:15px">${this.esc(msg)}</p>
-      <div class="row">
-        <button class="btn btn-ghost btn-sm" onclick="this.closest('.sheet-bg').remove()">Cancel</button>
-        <button class="btn btn-green btn-sm" id="conf-ok">Yes</button>
-      </div>
-    `);
-    m.querySelector('#conf-ok').onclick = () => { m.remove(); cb(); };
-  },
-
-  // ── Navigation ─────────────────────────────────────────────
-  go(screen) {
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById('s-'+screen).classList.add('active');
-    this.S.selOff = [];
-    this.S.selOn  = [];
-    this['render_'+screen]();
-  },
-
-  // ── HOME ───────────────────────────────────────────────────
-  render_home() {
-    const g = this.S.game;
-    const hasActive = g && g.phase !== 'finished';
-    const btns = [];
-    if (hasActive) btns.push(`<button class="btn btn-green" onclick="App.resumeActive()">&#9654; Resume Game</button>`);
-    btns.push(`<button class="btn ${hasActive?'btn-ghost':'btn-green'}" onclick="App.startWizard()">&#9917; New Game</button>`);
-    btns.push(`<button class="btn btn-ghost" onclick="App.go('squad')">&#128101; Manage Squad (${this.S.squad.length})</button>`);
-    if (this.S.history.length) btns.push(`<button class="btn btn-ghost" onclick="App.go('history')">&#128203; History (${this.S.history.length} games)</button>`);
-    document.getElementById('home-btns').innerHTML = btns.join('');
-  },
-
-  resumeActive() {
-    const phase = this.S.game.phase;
-    if (phase === 'halftime') { this.go('halftime'); return; }
-    this.go('game');
-    this.startTimer();
-  },
-
-  // ── SQUAD ──────────────────────────────────────────────────
-  render_squad() {
-    document.getElementById('squad-sub').textContent = `${this.S.squad.length} players`;
-    const tn = document.getElementById('team-name-input');
-    if (tn) tn.value = this.S.defaults.teamName || '';
-    const el = document.getElementById('squad-list');
-    if (!this.S.squad.length) {
-      el.innerHTML = `<div class="empty"><big>&#128101;</big>Add your squad above.</div>`;
-      return;
-    }
-    el.innerHTML = this.S.squad.map(p=>`
-      <div class="player-row">
-        <div class="avatar">${this.esc(p.name[0].toUpperCase())}</div>
-        <div class="player-name">${this.esc(p.name)}</div>
-        <button class="del" onclick="App.removePlayer('${p.id}')">&#10005;</button>
-      </div>
-    `).join('');
-  },
-
-  saveTeamName(val) {
-    this.S.defaults.teamName = val.trim();
-    this.save();
-  },
-
-  addPlayer() {
-    const inp = document.getElementById('new-player');
-    const name = inp.value.trim();
-    if (!name) return;
-    if (this.S.squad.find(p=>p.name.toLowerCase()===name.toLowerCase())) { this.toast('Already in squad'); return; }
-    this.S.squad.push({ id: this.uid(), name });
-    inp.value = '';
-    this.save();
-    this.render_squad();
-    inp.focus();
-  },
-
-  removePlayer(id) {
-    this.confirm('Remove this player from the squad?', ()=>{
-      this.S.squad = this.S.squad.filter(p=>p.id!==id);
-      this.save();
-      this.render_squad();
-    });
-  },
-
-  // ── PRE-GAME WIZARD ────────────────────────────────────────
-  startWizard() {
-    if (this.S.squad.length < 2) { this.toast('Add players to the squad first'); this.go('squad'); return; }
-    this.S.pg = { settings: {...this.S.defaults}, absent: [], lineup: [] };
-    this.S.pgStep = 0;
-    this.go('pregame');
-  },
-
-  render_pregame() {
-    const step = this.S.pgStep;
-    const titles = ['Game Settings', "Who's Playing?", 'Starting Lineup'];
-    document.getElementById('pg-title').textContent = titles[step];
-    document.getElementById('pg-steps').innerHTML = [0,1,2].map(i=>`<div class="step ${i<step?'done':i===step?'active':''}"></div>`).join('');
-    const back = document.getElementById('pg-back');
-    back.onclick = step === 0 ? ()=>App.go('home') : ()=>App.pgBack();
-    const body = document.getElementById('pg-body');
-    if (step===0) this.pgSettings(body);
-    else if (step===1) this.pgAttendance(body);
-    else this.pgLineup(body);
-  },
-
-  pgSettings(el) {
-    const s = this.S.pg.settings;
-    el.innerHTML = `
-      <div class="card">
-        ${[
-          ['halfLen',   'Half Length (minutes)', 5, 45],
-          ['halves',    'Number of Halves',      1, 4],
-          ['fieldN',    'Players on Field',      3, 11],
-          ['alertMin',  'Sub Alert After (min)', 5, 45],
-        ].map(([k,lbl,mn,mx])=>`
-          <div style="margin-bottom:18px">
-            <div class="label">${lbl}</div>
-            <div class="num-ctrl">
-              <button onclick="App.adj('${k}',-1,${mn},${mx})">&#8722;</button>
-              <div class="val" id="v-${k}">${s[k]}</div>
-              <button onclick="App.adj('${k}',1,${mn},${mx})">+</button>
-            </div>
+        <div class="donate-method">
+          <h4>&#8383; Bitcoin</h4>
+          <!-- REPLACE: swap the qr-soon div with an <img> tag once you have your Bitcoin address.
+               Generate a QR at https://qr.io or similar, save as bitcoin-qr.png in this folder.
+               Then replace the qr-soon div with: <img src="./bitcoin-qr.png" alt="Bitcoin QR"> -->
+          <div class="qr-wrap">
+            <div class="qr-soon">Bitcoin address<br>coming soon</div>
           </div>
-        `).join('')}
-      </div>
-      <button class="btn btn-green" onclick="App.pgNext()">Next &#8594;</button>
-    `;
-  },
-
-  adj(k, d, mn, mx) {
-    const s = this.S.pg.settings;
-    s[k] = Math.max(mn, Math.min(mx, s[k]+d));
-    const el = document.getElementById('v-'+k);
-    if (el) el.textContent = s[k];
-  },
-
-  pgAttendance(el) {
-    const pg = this.S.pg;
-    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id)).length;
-    el.innerHTML = `
-      <p style="color:var(--muted);font-size:14px;margin-bottom:12px">
-        Tap a player to mark absent. <strong style="color:var(--text)">${present} present.</strong>
-      </p>
-      <div id="att-list">
-        ${this.S.squad.map(p=>{
-          const away = pg.absent.includes(p.id);
-          return `<div class="att-item ${away?'away':''}" onclick="App.toggleAbsent('${p.id}')">
-            <div class="check">${away?'':'&#10003;'}</div>
-            <div class="player-name">${this.esc(p.name)}</div>
-            ${away?'<span style="font-size:11px;color:var(--muted)">AWAY</span>':''}
-          </div>`;
-        }).join('')}
-      </div>
-      <div class="mt16"><button class="btn btn-green" onclick="App.pgNext()">Next &#8594;</button></div>
-    `;
-  },
-
-  toggleAbsent(id) {
-    const pg = this.S.pg;
-    const i = pg.absent.indexOf(id);
-    if (i===-1) { pg.absent.push(id); pg.lineup = pg.lineup.filter(x=>x!==id); }
-    else pg.absent.splice(i,1);
-    this.render_pregame();
-  },
-
-  pgLineup(el) {
-    const pg = this.S.pg;
-    const n = pg.settings.fieldN;
-    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
-    const onField = present.filter(p=>pg.lineup.includes(p.id));
-    const onBench = present.filter(p=>!pg.lineup.includes(p.id));
-    const ok = onField.length === Math.min(n, present.length);
-
-    el.innerHTML = `
-      <p style="color:var(--muted);font-size:14px;margin-bottom:14px">
-        Tap to add/remove from starting lineup.
-        <strong style="color:${ok?'var(--green)':'var(--text)'}"> ${onField.length}/${n} selected.</strong>
-      </p>
-      <div class="sec">&#9917; On Field (${onField.length}/${n})</div>
-      <div class="lu-grid" style="margin-bottom:16px">
-        ${onField.map(p=>`<div class="lu-card field" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
-        ${onField.length===0?'<div style="color:var(--muted);font-size:13px;padding:4px">None yet</div>':''}
-      </div>
-      <div class="sec">&#129681; Bench (${onBench.length})</div>
-      <div class="lu-grid" style="margin-bottom:20px">
-        ${onBench.map(p=>`<div class="lu-card" onclick="App.toggleLineup('${p.id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`).join('')}
-      </div>
-      <button class="btn ${ok?'btn-green':'btn-ghost'}" onclick="App.kickOff()" ${ok?'':'style="opacity:0.5"'}>
-        ${ok ? '&#9654; Kick Off!' : `Select ${Math.min(n,present.length)-onField.length} more starter${Math.min(n,present.length)-onField.length!==1?'s':''}`}
-      </button>
-    `;
-  },
-
-  toggleLineup(id) {
-    const pg = this.S.pg;
-    const i = pg.lineup.indexOf(id);
-    if (i===-1) {
-      const _presN = this.S.squad.filter(p=>!pg.absent.includes(p.id)).length;
-      const _maxF = Math.min(pg.settings.fieldN, _presN);
-      if (pg.lineup.length >= _maxF) { this.toast(`Max ${_maxF} starters`); return; }
-      pg.lineup.push(id);
-    } else {
-      pg.lineup.splice(i,1);
-    }
-    this.render_pregame();
-  },
-
-  pgNext() {
-    if (this.S.pgStep===1) {
-      const present = this.S.squad.filter(p=>!this.S.pg.absent.includes(p.id));
-      if (present.length < 2) { this.toast('Need at least 2 present players'); return; }
-    }
-    this.S.pgStep++;
-    this.render_pregame();
-  },
-
-  pgBack() { this.S.pgStep--; this.render_pregame(); },
-
-  // ── KICK OFF ───────────────────────────────────────────────
-  kickOff() {
-    const pg = this.S.pg;
-    const present = this.S.squad.filter(p=>!pg.absent.includes(p.id));
-    if (pg.lineup.length !== Math.min(pg.settings.fieldN, present.length)) return;
-
-    const bench   = present.filter(p=>!pg.lineup.includes(p.id)).map(p=>p.id);
-    const now     = Date.now();
-
-    this.S.defaults = { ...pg.settings };
-
-    const stats = {};
-    [...pg.lineup, ...bench].forEach(id => {
-      stats[id] = { total: 0, stintStart: pg.lineup.includes(id) ? 0 : null, benchCount: pg.lineup.includes(id) ? 0 : 1, benchStart: pg.lineup.includes(id) ? null : 0 };
-    });
-
-    this.S.game = {
-      date:       new Date().toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
-      settings:   { ...pg.settings },
-      phase:      'first_half',
-      half:       1,
-      halfStart:  now,
-      elapsed:    0,
-      field:      [...pg.lineup],
-      bench:      [...bench],
-      absent:     [...pg.absent],
-      subLog:     [],
-      subCount:   0,
-      score:      { us: 0, them: 0 },
-      teamName:   pg.settings.teamName || '',
-      stats,
-    };
-
-    this.save();
-    this.go('game');
-    this.startTimer();
-  },
-
-  // ── TIMER ──────────────────────────────────────────────────
-  startTimer() {
-    if (this.timer) clearInterval(this.timer);
-    this.timer = setInterval(()=>this.tick(), 1000);
-  },
-
-  stopTimer() { clearInterval(this.timer); this.timer = null; },
-
-  togglePause() {
-    const g = this.S.game;
-    if (!g) return;
-    if (g.phase === 'paused') {
-      g.halfStart = Date.now();
-      g.phase = g.prevPhase;
-      delete g.prevPhase;
-      this.startTimer();
-    } else {
-      const addSecs = Math.floor((Date.now() - g.halfStart) / 1000);
-      g.elapsed += addSecs;
-      g.halfElapsed = (g.halfElapsed || 0) + addSecs;
-      g.prevPhase = g.phase;
-      g.phase = 'paused';
-      this.stopTimer();
-      this.updateGameUI();
-    }
-    this.save();
-    this.renderPauseControls();
-  },
-
-  renderPauseControls() {
-    const g = this.S.game;
-    const paused = g.phase === 'paused';
-    const activePhase = paused ? g.prevPhase : g.phase;
-    const pauseBtn = document.getElementById('g-game-pause-btn');
-    const endBtn   = document.getElementById('g-pause-btn');
-    const phaseEl  = document.getElementById('g-phase');
-    if (pauseBtn) pauseBtn.textContent = paused ? '▶ Resume' : '⏸ Pause';
-    if (endBtn)   { endBtn.disabled = paused; endBtn.style.opacity = paused ? '0.4' : '1'; endBtn.textContent = activePhase === 'second_half' ? '🏁 End Game' : '⏸ End Half'; }
-    if (phaseEl)  phaseEl.textContent = paused ? 'PAUSED' : (g.half === 1 ? '1ST HALF' : '2ND HALF');
-  },
-
-  tick() { if (this.S.game) this.updateGameUI(); },
-
-  gameSeconds() {
-    const g = this.S.game;
-    if (!g) return 0;
-    if (g.phase === 'halftime' || g.phase === 'paused') return g.elapsed;
-    return g.elapsed + Math.floor((Date.now() - g.halfStart) / 1000);
-  },
-
-  halfSeconds() {
-    const g = this.S.game;
-    const banked = g.halfElapsed || 0;
-    if (g.phase === 'paused') return banked;
-    return banked + Math.floor((Date.now() - g.halfStart) / 1000);
-  },
-
-  stintSecs(id) {
-    const st = this.S.game.stats[id];
-    if (!st || st.stintStart === null) return 0;
-    return this.gameSeconds() - st.stintStart;
-  },
-
-  benchSecs(id) {
-    const st = this.S.game?.stats[id];
-    if (!st || st.benchStart == null) return 0;
-    return this.gameSeconds() - st.benchStart;
-  },
-
-  suggestSub(count) {
-    const g = this.S.game;
-    if (!g || !g.bench.length) return [];
-    const max = Math.min(count, g.field.length, g.bench.length);
-    const results = [];
-    const usedField = new Set();
-    const usedBench = new Set();
-    for (let i = 0; i < max; i++) {
-      const fc = [...g.field].filter(id => !usedField.has(id)).sort((a, b) => {
-        const tDiff = this.totalSecs(b) - this.totalSecs(a);
-        if (Math.abs(tDiff) > 30) return tDiff;
-        return (g.stats[a].benchCount||0) - (g.stats[b].benchCount||0);
-      });
-      const bc = [...g.bench].filter(id => !usedBench.has(id)).sort((a, b) => {
-        const bDiff = this.benchSecs(b) - this.benchSecs(a);
-        if (Math.abs(bDiff) > 30) return bDiff;
-        const bcDiff = (g.stats[b].benchCount||0) - (g.stats[a].benchCount||0);
-        if (bcDiff !== 0) return bcDiff;
-        return this.totalSecs(a) - this.totalSecs(b);
-      });
-      if (!fc.length || !bc.length) break;
-      results.push({ off: fc[0], on: bc[0] });
-      usedField.add(fc[0]);
-      usedBench.add(bc[0]);
-    }
-    return results;
-  },
-
-  showSuggest(n) {
-    const g = this.S.game;
-    if (!g) return;
-    const maxSwaps = Math.min(g.field.length, g.bench.length);
-    if (!maxSwaps) return;
-    if (n !== undefined) { this.S.suggestN = n; this.save(); }
-    const count = Math.min(this.S.suggestN || 1, maxSwaps);
-    const suggestions = this.suggestSub(count);
-    if (!suggestions.length) return;
-
-    const pills = Array.from({length: maxSwaps}, (_, i) => i + 1).map(i =>
-      `<button onclick="App.showSuggest(${i})" style="background:${i===count?'var(--green)':'none'};border:1px solid ${i===count?'var(--green)':'var(--border)'};border-radius:6px;color:${i===count?'#000':'var(--text)'};font-size:12px;padding:2px 9px;cursor:pointer">${i}</button>`
-    ).join('');
-
-    const rows = suggestions.map(({ off, on }, idx) => {
-      const offP     = this.player(off);
-      const onP      = this.player(on);
-      const offTotal = this.mins(this.totalSecs(off));
-      const offStint = this.mins(this.stintSecs(off));
-      const offBc    = g.stats[off].benchCount || 0;
-      const onWait   = this.mins(this.benchSecs(on));
-      const onTotal  = this.mins(this.totalSecs(on));
-      const onBc     = g.stats[on].benchCount || 0;
-      return `
-        ${idx > 0 ? '<hr style="border:none;border-top:1px solid var(--border);margin:14px 0">' : ''}
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="flex:1">
-            <div style="margin-bottom:8px">
-              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px">&#8595; Off</div>
-              <div style="font-size:18px;font-weight:700;color:#e05252">${this.esc(offP.name)}</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px">${offTotal}m total &nbsp;·&nbsp; ${offStint}m this stint &nbsp;·&nbsp; ${offBc} sit${offBc===1?'':'s'}</div>
-            </div>
-            <div>
-              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:2px">&#8593; On</div>
-              <div style="font-size:18px;font-weight:700;color:var(--green)">${this.esc(onP.name)}</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px">${onWait}m waiting &nbsp;·&nbsp; ${onTotal}m total &nbsp;·&nbsp; ${onBc} sit${onBc===1?'':'s'}</div>
-            </div>
-          </div>
-          <button onclick="App.queueSub('${off}','${on}')" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;padding:10px 14px;cursor:pointer;white-space:nowrap;flex-shrink:0">Queue &#8594;</button>
-        </div>`;
-    }).join('');
-
-    document.querySelector('.sheet-bg')?.remove();
-    this.modal(`
-      <div class="sheet-title">
-        <div style="display:flex;align-items:center;gap:10px">
-          <strong>&#128161; Suggestions</strong>
-          <div style="display:flex;gap:4px">${pills}</div>
+          <!-- REPLACE: put your Bitcoin address here -->
+          <div class="donate-addr">Bitcoin address coming soon</div>
         </div>
-        <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
+
       </div>
-      ${rows}
-      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:16px" onclick="this.closest('.sheet-bg').remove()">Dismiss</button>
-    `);
-  },
+    </div>
+  </section>
 
-  queueSub(offId, onId) {
-    document.querySelector('.sheet-bg')?.remove();
-    this.S.selOff = [offId];
-    this.S.selOn  = [onId];
-    this.renderPlayerGrids();
-    this.renderHint();
-  },
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <p>Built by a coach, for coaches &middot; <a href="https://github.com/WhiteFireOne/subtracker" target="_blank">View on GitHub</a></p>
+    <p>Free forever &middot; No ads &middot; No tracking &middot; Your data stays on your phone</p>
+  </footer>
 
-  totalSecs(id) {
-    const st = this.S.game.stats[id];
-    if (!st) return 0;
-    const cur = st.stintStart !== null ? this.gameSeconds() - st.stintStart : 0;
-    return st.total + cur;
-  },
-
-  // ── GAME UI ────────────────────────────────────────────────
-  render_game() {
-    const g = this.S.game;
-    if (!g) return;
-
-    document.getElementById('g-half-lbl').textContent = `Half ${g.half}`;
-    this.renderPauseControls();
-
-    this.updateGameUI();
-    this.renderPlayerGrids();
-    this.renderHint();
-    this.renderGameFooter();
-    this.renderScore();
-  },
-
-  updateGameUI() {
-    const g = this.S.game;
-    const hs = this.halfSeconds();
-    const limit = g.settings.halfLen * 60;
-    const over  = hs > limit;
-
-    const clk = document.getElementById('g-clock');
-    if (clk) { clk.textContent = this.fmt(hs); clk.style.color = over ? 'var(--amber)' : 'var(--green)'; }
-
-    const subLbl = document.getElementById('g-sub-lbl');
-    if (subLbl) subLbl.textContent = `🔄 ${g.subCount} sub${g.subCount!==1?'s':''}`;
-
-    const alertSecs = g.settings.alertMin * 60;
-
-    g.field.forEach(id=>{
-      const el = document.getElementById('pc-'+id);
-      if (!el) return;
-      const ss = this.stintSecs(id);
-      const ts = this.totalSecs(id);
-      const st = el.querySelector('.pc-time');
-      const tt = el.querySelector('.pc-total');
-      if (st) st.textContent = this.fmt(ss);
-      if (tt) tt.textContent = `${this.mins(ts)}m total`;
-      el.classList.remove('warn','over');
-      if (ss >= alertSecs) el.classList.add('over');
-      else if (ss >= alertSecs - 120) el.classList.add('warn');
-    });
-
-    g.bench.forEach(id=>{
-      const el = document.getElementById('pc-'+id);
-      if (!el) return;
-      const ts = this.totalSecs(id);
-      const tt = el.querySelector('.pc-total');
-      if (tt) tt.textContent = `${this.mins(ts)}m played`;
-    });
-
-    // Update playing time ranking bars
-    const allIds = [...g.field, ...g.bench];
-    const rankMax = Math.max(...allIds.map(id => this.totalSecs(id)), 1);
-    allIds.forEach(id => {
-      const ts   = this.totalSecs(id);
-      const pct  = Math.min(100, (ts / rankMax) * 100);
-      const bar  = document.getElementById('rank-bar-'+id);
-      const mins = document.getElementById('rank-mins-'+id);
-      if (bar)  bar.style.width = pct + '%';
-      if (mins) mins.textContent = this.mins(ts);
-    });
-  },
-
-  renderPlayerGrids() {
-    const g   = this.S.game;
-    const sel = this.S.sel;
-    const alertSecs = g.settings.alertMin * 60;
-
-    const card = (id, zone) => {
-      const p  = this.player(id);
-      if (!p) return '';
-      const ss = zone==='field' ? this.stintSecs(id) : 0;
-      const ts = this.totalSecs(id);
-      let cls = zone==='field' ? 'pc field' : 'pc bench';
-      if (zone==='field') {
-        if (ss >= alertSecs) cls += ' over';
-        else if (ss >= alertSecs-120) cls += ' warn';
-      }
-      if (this.S.selOff.includes(id)) cls += ' sel-off';
-      if (this.S.selOn.includes(id))  cls += ' sel-on';
-      return `<div class="${cls}" id="pc-${id}" onclick="App.tap('${id}')">
-        <div class="pc-dot"></div>
-        <div class="pc-name">${this.esc(p.name)}</div>
-        <div class="pc-time">${zone==='field' ? this.fmt(ss) : '&#129681;'}</div>
-        <div class="pc-total">${zone==='field' ? `${this.mins(ts)}m total` : `${this.mins(ts)}m played`}</div>
-      </div>`;
-    };
-
-    const allIds = [...g.field, ...g.bench];
-    const rankSorted = [...allIds].sort((a,b) => this.totalSecs(b) - this.totalSecs(a));
-    const rankMax = Math.max(...rankSorted.map(id => this.totalSecs(id)), 1);
-
-    const body = document.getElementById('g-body');
-    body.innerHTML = `
-      <div class="zone">
-        <div class="zone-lbl">&#9917; On Field <span class="zone-badge">${g.field.length}</span></div>
-        <div class="pgrid">${g.field.map(id=>card(id,'field')).join('')}</div>
-      </div>
-      <div class="divider"></div>
-      <div class="zone" style="padding-bottom:12px">
-        <div class="zone-lbl">&#129681; Bench <span class="zone-badge">${g.bench.length}</span></div>
-        ${g.bench.length
-          ? `<div class="pgrid">${g.bench.map(id=>card(id,'bench')).join('')}</div>`
-          : `<div style="color:var(--muted);font-size:13px;padding:8px 4px">All players on field</div>`}
-      </div>
-      <div class="divider"></div>
-      <div class="zone" style="padding-bottom:12px">
-        <div class="zone-lbl" style="justify-content:space-between;padding-right:4px">
-          <span>&#9201; Playing Time</span>
-          <button onclick="App.showSuggest()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:3px 10px;cursor:pointer;line-height:1.4">&#128161; Suggest</button>
-        </div>
-        ${rankSorted.map(id => {
-          const p = this.player(id);
-          if (!p) return '';
-          const ts = this.totalSecs(id);
-          const pct = Math.min(100, (ts / rankMax) * 100);
-          const bc = g.stats[id]?.benchCount || 0;
-          return `<div class="rank-row">
-            <div class="rank-name">${this.esc(p.name)}</div>
-            <div class="rank-bar-bg"><div class="rank-bar" id="rank-bar-${id}" style="width:${pct}%"></div></div>
-            <span class="rank-mins" id="rank-mins-${id}">${this.mins(ts)}</span><span style="font-size:13px;color:var(--muted)">m</span>
-            <span class="rank-bench">&#129681;${bc}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    `;
-  },
-
-  renderHint() {
-    const el  = document.getElementById('g-hint');
-    const off = this.S.selOff;
-    const on  = this.S.selOn;
-    if (!off.length && !on.length) { el.innerHTML = ''; return; }
-
-    const offNames = off.map(id => this.esc(this.player(id)?.name || '?')).join(', ');
-    const onNames  = on.map(id  => this.esc(this.player(id)?.name || '?')).join(', ');
-    let msg = '';
-    if (off.length) msg += `<span style="color:var(--red)">&#8595; OFF: ${offNames}</span>`;
-    if (off.length && on.length) msg += '&ensp;';
-    if (on.length)  msg += `<span style="color:var(--green)">&#8593; ON: ${onNames}</span>`;
-
-    if (off.length !== on.length) {
-      const diff = off.length - on.length;
-      msg += `<br><span style="font-size:11px;color:var(--muted)">${diff > 0 ? `Select ${diff} more from bench` : `Select ${-diff} more from field`}</span>`;
-    }
-    el.innerHTML = `<div class="hint">${msg}</div>`;
-  },
-
-  renderGameFooter() {
-    const off   = this.S.selOff;
-    const on    = this.S.selOn;
-    const valid = off.length > 0 && off.length === on.length;
-    const n     = off.length;
-    document.getElementById('g-footer').innerHTML = `
-      <button class="btn btn-ghost" style="flex:1" onclick="App.showLog()">&#128203; Log</button>
-      ${valid
-        ? `<button class="btn btn-green" style="flex:2" onclick="App.makeInterchange()">&#128260; Interchange${n > 1 ? ` (${n})` : ''}</button>`
-        : `<button class="btn btn-red"   style="flex:1" onclick="App.endGameReq()">&#127956; End Game</button>`}
-    `;
-  },
-
-  teamLabel() {
-    return this.esc(this.S.game?.teamName || this.S.defaults.teamName || 'US');
-  },
-
-  renderScore() {
-    const el = document.getElementById('g-score');
-    if (!el) return;
-    const s  = this.S.game?.score || { us: 0, them: 0 };
-    const us = this.teamLabel();
-    el.innerHTML = `
-      <div class="score-side">
-        <button class="score-btn-main" onclick="App.goal('us')">
-          <span class="score-team-lbl">${us}</span>
-          <span class="score-num">${s.us}</span>
-        </button>
-        <button class="score-undo" onclick="App.undoGoal('us')" title="Undo">&#8722;</button>
-      </div>
-      <div class="score-div">&#8212;</div>
-      <div class="score-side right">
-        <button class="score-btn-main" onclick="App.goal('them')">
-          <span class="score-num">${s.them}</span>
-          <span class="score-team-lbl">THEM</span>
-        </button>
-        <button class="score-undo" onclick="App.undoGoal('them')" title="Undo">&#8722;</button>
-      </div>
-    `;
-  },
-
-  goal(team) {
-    const g = this.S.game;
-    if (!g.score) g.score = { us: 0, them: 0 };
-    g.score[team]++;
-    this.save();
-    this.renderScore();
-    const lbl = team === 'us' ? this.teamLabel() : 'them';
-    this.toast(`&#9917; Goal to ${lbl}!`);
-  },
-
-  undoGoal(team) {
-    const g = this.S.game;
-    if (!g.score) g.score = { us: 0, them: 0 };
-    if (g.score[team] > 0) { g.score[team]--; this.save(); this.renderScore(); }
-  },
-
-  // ── SUB ────────────────────────────────────────────────────
-  tap(id) {
-    const g       = this.S.game;
-    const onField = g.field.includes(id);
-    const list    = onField ? this.S.selOff : this.S.selOn;
-    const i       = list.indexOf(id);
-    if (i === -1) list.push(id);
-    else list.splice(i, 1);
-    this.renderPlayerGrids();
-    this.renderHint();
-    this.renderGameFooter();
-  },
-
-  makeInterchange() {
-    const off = [...this.S.selOff];
-    const on  = [...this.S.selOn];
-    if (!off.length || off.length !== on.length) return;
-
-    const g  = this.S.game;
-    const gs = this.gameSeconds();
-    const t  = this.fmt(this.halfSeconds());
-
-    off.forEach((fieldId, i) => {
-      const benchId = on[i];
-      const fp = this.player(fieldId);
-      const bp = this.player(benchId);
-
-      g.field = g.field.map(id => id === fieldId ? benchId : id);
-      g.bench = g.bench.map(id => id === benchId ? fieldId : id);
-
-      const fs = g.stats[fieldId];
-      if (fs.stintStart !== null) { fs.total += gs - fs.stintStart; fs.stintStart = null; }
-      if (!fs.benchCount) fs.benchCount = 0;
-      fs.benchCount++;
-      fs.benchStart = gs;
-      g.stats[benchId].stintStart = gs;
-      g.stats[benchId].benchStart = null;
-
-      g.subLog.push({ t, half: g.half, on: benchId, off: fieldId, onName: bp.name, offName: fp.name });
-      g.subCount++;
-    });
-
-    this.S.selOff = [];
-    this.S.selOn  = [];
-
-    const msg = off.length === 1
-      ? `${this.player(on[0])?.name} on for ${this.player(off[0])?.name}`
-      : `${off.length} interchanges made`;
-    this.toast(msg);
-    this.save();
-    this.render_game();
-  },
-
-  // ── HALFTIME ───────────────────────────────────────────────
-  halfOrEnd() {
-    const g = this.S.game;
-    if (g.phase === 'paused') return;
-    if (g.phase === 'second_half') { this.endGameReq(); return; }
-    this.confirm('Go to half time?', ()=>this.goHalftime());
-  },
-
-  goHalftime() {
-    const g = this.S.game;
-    g.elapsed += Math.floor((Date.now()-g.halfStart)/1000);
-    g.phase = 'halftime';
-    this.stopTimer();
-    this.save();
-    this.go('halftime');
-  },
-
-  render_halftime() {
-    const g = this.S.game;
-    document.getElementById('ht-clock').textContent = this.fmt(g.elapsed);
-    const hs  = g.score || { us: 0, them: 0 };
-    const usl = this.esc(g.teamName || 'US');
-    document.getElementById('ht-score').textContent = `${hs.us} — ${hs.them}`;
-    document.getElementById('ht-score-lbl').textContent = `${usl} — THEM`;
-
-    const ids = [...g.field, ...g.bench];
-    const sorted = [...ids].sort((a,b)=>this.totalSecs(b)-this.totalSecs(a));
-    const maxSecs = sorted.length ? this.totalSecs(sorted[0]) : 1;
-
-    document.getElementById('ht-stats').innerHTML = sorted.map(id=>{
-      const p    = this.player(id);
-      if (!p) return '';
-      const secs = this.totalSecs(id);
-      const pct  = Math.min(100,(secs/maxSecs)*100);
-      const onF  = g.field.includes(id);
-      const bc   = g.stats[id]?.benchCount || 0;
-      return `<div class="ht-row">
-        <div class="ht-name">${this.esc(p.name)} ${onF?'&#9917;':'&#129681;'}</div>
-        <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
-        <span class="ht-mins">${this.mins(secs)}</span><span class="ht-unit">m</span>
-        <span class="rank-bench">&#129681;${bc}</span>
-      </div>`;
-    }).join('');
-
-    // 2nd half lineup picker
-    if (!g.htLineup) g.htLineup = [...g.field];
-    const allIds2 = [...g.field, ...g.bench];
-    const fieldN2 = Math.min(g.settings.fieldN, allIds2.length);
-    const htOnField = allIds2.filter(id => g.htLineup.includes(id));
-    const htOnBench = allIds2.filter(id => !g.htLineup.includes(id));
-    const htOk = htOnField.length === fieldN2;
-    document.getElementById('ht-lineup').innerHTML = `
-      <p style="color:var(--muted);font-size:13px;margin-bottom:10px">Tap to swap players on/off. Need ${fieldN2} on field.</p>
-      <div class="sec" style="margin-bottom:6px">&#9917; On Field (${htOnField.length}/${fieldN2})</div>
-      <div class="lu-grid" style="margin-bottom:12px">
-        ${htOnField.map(id=>{const p=this.player(id);return p?`<div class="lu-card field" onclick="App.toggleHtLineup('${id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`:''}).join('')}
-        ${htOnField.length===0?'<div style="color:var(--muted);font-size:13px;padding:4px">None selected</div>':''}
-      </div>
-      <div class="sec" style="margin-bottom:6px">&#129681; Bench (${htOnBench.length})</div>
-      <div class="lu-grid" style="margin-bottom:8px">
-        ${htOnBench.map(id=>{const p=this.player(id);return p?`<div class="lu-card" onclick="App.toggleHtLineup('${id}')"><div class="lu-dot"></div><div class="lu-name">${this.esc(p.name)}</div></div>`:''}).join('')}
-      </div>
-    `;
-    const htBtn = document.getElementById('ht-start-btn');
-    htBtn.disabled = !htOk;
-    htBtn.style.opacity = htOk ? '1' : '0.5';
-    htBtn.className = `btn ${htOk ? 'btn-green' : 'btn-ghost'}`;
-
-    document.getElementById('ht-log').innerHTML = this.renderLogItems(g.subLog) || '<div style="color:var(--muted);font-size:14px">No subs yet</div>';
-  },
-
-  toggleHtLineup(id) {
-    const g = this.S.game;
-    const allIds = [...g.field, ...g.bench];
-    const fieldN = Math.min(g.settings.fieldN, allIds.length);
-    const i = g.htLineup.indexOf(id);
-    if (i === -1) {
-      if (g.htLineup.length >= fieldN) { this.toast(`Max ${fieldN} starters`); return; }
-      g.htLineup.push(id);
-    } else {
-      g.htLineup.splice(i, 1);
-    }
-    this.render_halftime();
-  },
-
-  resumeGame() {
-    const g = this.S.game;
-    const allIds = [...g.field, ...g.bench];
-    const lineup = (g.htLineup && g.htLineup.length > 0) ? g.htLineup : [...g.field];
-    const gs = g.elapsed; // game-seconds at 2nd half kickoff
-    // Bank time for players leaving field; start stint for players joining
-    g.field.forEach(id => {
-      if (!lineup.includes(id)) {
-        const st = g.stats[id];
-        if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
-        if (!st.benchCount) st.benchCount = 0;
-        st.benchCount++;
-        st.benchStart = gs;
-      }
-    });
-    g.bench.forEach(id => {
-      if (lineup.includes(id)) { g.stats[id].stintStart = gs; g.stats[id].benchStart = null; }
-    });
-    g.field = allIds.filter(id => lineup.includes(id));
-    g.bench = allIds.filter(id => !lineup.includes(id));
-    g.htLineup = null;
-    g.phase = 'second_half';
-    g.half  = 2;
-    g.halfStart = Date.now();
-    g.halfElapsed = 0;
-    this.save();
-    this.go('game');
-    this.startTimer();
-  },
-
-  // ── END GAME ───────────────────────────────────────────────
-  endGameReq() {
-    this.confirm('End the game now?', ()=>this.endGame());
-  },
-
-  endGame() {
-    const g  = this.S.game;
-    const gs = this.gameSeconds();
-    g.field.forEach(id=>{
-      const st = g.stats[id];
-      if (st.stintStart !== null) { st.total += gs - st.stintStart; st.stintStart = null; }
-    });
-    g.phase       = 'finished';
-    g.totalSeconds = gs;
-    this.stopTimer();
-    this.save();
-    this.go('postgame');
-  },
-
-  // ── POST-GAME ──────────────────────────────────────────────
-  render_postgame() {
-    const g = this.S.game;
-    document.getElementById('pg-date').textContent = g.date;
-    const sc  = g.score || { us: 0, them: 0 };
-    const usl = this.esc(g.teamName || 'US');
-    document.getElementById('pg-score').textContent = `${sc.us} — ${sc.them}`;
-    document.getElementById('pg-score-lbl').textContent = `${usl} — THEM`;
-
-    const ids     = [...new Set([...g.field,...g.bench])];
-    const totalM  = this.mins(g.totalSeconds||0);
-
-    document.getElementById('pg-stats').innerHTML = `
-      <div class="stat-box"><div class="stat-val">${totalM}'</div><div class="stat-lbl">Game Time</div></div>
-      <div class="stat-box"><div class="stat-val">${g.subCount}</div><div class="stat-lbl">Subs</div></div>
-      <div class="stat-box"><div class="stat-val">${ids.length}</div><div class="stat-lbl">Players Used</div></div>
-    `;
-
-    const sorted  = [...ids].sort((a,b)=>g.stats[b].total - g.stats[a].total);
-    const maxSecs = sorted.length ? g.stats[sorted[0]].total : 1;
-
-    document.getElementById('pg-players').innerHTML = sorted.map(id=>{
-      const p   = this.player(id);
-      if (!p) return '';
-      const sec = g.stats[id].total;
-      const pct = Math.min(100,(sec/maxSecs)*100);
-      return `<div class="ht-row" style="margin-bottom:8px">
-        <div class="ht-name">${this.esc(p.name)}</div>
-        <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
-        <span class="ht-mins">${this.mins(sec)}</span><span class="ht-unit">m</span>
-      </div>`;
-    }).join('');
-
-    document.getElementById('pg-log').innerHTML = this.renderLogItems(g.subLog) || '<div style="color:var(--muted);font-size:14px">No subs were made</div>';
-  },
-
-  saveGame() {
-    const g = this.S.game;
-    this.S.history.unshift({ ...g, savedAt: Date.now() });
-    if (this.S.history.length > 30) this.S.history.length = 30;
-    this.S.game = null;
-    this.save();
-    this.toast('Game saved');
-    this.go('home');
-  },
-
-  // ── HISTORY ────────────────────────────────────────────────
-  render_history() {
-    const el = document.getElementById('hist-body');
-    if (!this.S.history.length) {
-      el.innerHTML = `<div class="empty"><big>&#128203;</big>No games saved yet.</div>`;
-      return;
-    }
-    el.innerHTML = this.S.history.map((g,i)=>{
-      const ids = [...new Set([...g.field,...g.bench])];
-      return `<div class="hist-item" onclick="App.histDetail(${i})">
-        <div class="hist-icon">&#9917;</div>
-        <div class="hist-info">
-          <div class="hist-date">${g.date}</div>
-          <div class="hist-meta">${ids.length} players &middot; ${this.mins(g.totalSeconds||0)} min &middot; ${g.subCount} subs</div>
-        </div>
-        <div class="hist-arr">&#8250;</div>
-      </div>`;
-    }).join('');
-  },
-
-  histDetail(i) {
-    const g      = this.S.history[i];
-    const ids    = [...new Set([...g.field,...g.bench])];
-    const sorted = [...ids].sort((a,b)=>(g.stats[b]?.total||0)-(g.stats[a]?.total||0));
-    const maxS   = sorted.length ? (g.stats[sorted[0]]?.total||1) : 1;
-
-    const el = document.getElementById('hist-body');
-    el.innerHTML = `
-      <button class="btn btn-ghost btn-sm" style="width:auto;margin-bottom:14px" onclick="App.render_history()">&#8592; Back</button>
-      <div class="card">
-        <div style="font-weight:700;font-size:16px">${g.date}</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:4px">${ids.length} players &middot; ${this.mins(g.totalSeconds||0)} min &middot; ${g.subCount} subs</div>
-      </div>
-      <div class="sec">Player Minutes</div>
-      ${sorted.map(id=>{
-        const p   = this.player(id);
-        if (!p) return `<div class="ht-row" style="margin-bottom:8px"><div class="ht-name" style="color:var(--muted)">[removed]</div><span class="ht-mins">${this.mins(g.stats[id]?.total||0)}</span><span class="ht-unit">m</span></div>`;
-        const sec = g.stats[id]?.total||0;
-        const pct = Math.min(100,(sec/maxS)*100);
-        return `<div class="ht-row" style="margin-bottom:8px">
-          <div class="ht-name">${this.esc(p.name)}</div>
-          <div class="ht-bar-bg"><div class="ht-bar" style="width:${pct}%"></div></div>
-          <span class="ht-mins">${this.mins(sec)}</span><span class="ht-unit">m</span>
-        </div>`;
-      }).join('')}
-      ${g.subLog.length ? `<div class="sec mt16">Substitutions</div>${this.renderLogItems(g.subLog)}` : ''}
-      <div class="mt16">
-        <button class="btn btn-red btn-sm" style="width:auto" onclick="App.deleteGame(${i})">Delete Game</button>
-      </div>
-    `;
-  },
-
-  deleteGame(i) {
-    this.confirm('Delete this game from history?', ()=>{
-      this.S.history.splice(i,1);
-      this.save();
-      this.render_history();
-    });
-  },
-
-  // ── SUB LOG ────────────────────────────────────────────────
-  renderLogItems(log) {
-    return log.map(s=>`
-      <div class="log-item">
-        <span class="log-time">${s.t}</span>
-        <span class="log-half">H${s.half}</span>
-        <span class="log-on">&#8593; ${this.esc(s.onName)}</span>
-        <span class="log-dot">&middot;</span>
-        <span class="log-off">&#8595; ${this.esc(s.offName)}</span>
-      </div>
-    `).join('');
-  },
-
-  showLog() {
-    const g = this.S.game;
-    if (!g.subLog.length) { this.toast('No subs yet'); return; }
-    this.modal(`
-      <div class="sheet-title">
-        <strong>Sub Log</strong>
-        <button class="sheet-close" onclick="this.closest('.sheet-bg').remove()">&#10005;</button>
-      </div>
-      ${this.renderLogItems(g.subLog)}
-    `);
-  },
-
-  // ── INIT ───────────────────────────────────────────────────
-  init() {
-    this.load();
-    if (this.S.game && ['first_half','second_half'].includes(this.S.game.phase)) {
-      this.startTimer();
-    }
-    this.go('home');
-  },
-};
-
-document.addEventListener('DOMContentLoaded', ()=>App.init());
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js');
-  });
-}
-</script>
 </body>
 </html>

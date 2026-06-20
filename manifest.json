@@ -2,7 +2,7 @@
   "name": "SubTracker",
   "short_name": "SubTracker",
   "description": "Substitution manager for coaches",
-  "start_url": "./index.html",
+  "start_url": "./app.html",
   "display": "standalone",
   "background_color": "#0d0d14",
   "theme_color": "#0d0d14",
